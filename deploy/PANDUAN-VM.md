@@ -1,7 +1,7 @@
 # Panduan Instalasi di VM Proxmox
 
 Target: VM **Ubuntu Server 24.04 LTS** (atau Debian 13) di Proxmox, diakses publik lewat
-reverse proxy NPMplus. Skrip `deploy/install.sh` mengerjakan hampir semuanya (Nginx, PHP 8.3,
+reverse proxy NPMplus. Skrip `deploy/install.sh` mengerjakan hampir semuanya (Nginx, PHP 8.3/8.5,
 MariaDB, Composer, database, `.env`, migrasi, konfigurasi Nginx).
 
 ## 1. Buat VM di Proxmox

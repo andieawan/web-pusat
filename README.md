@@ -69,7 +69,7 @@ server {
     location / { try_files $uri $uri/ /index.php?$query_string; }
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/run/php/php8.5-fpm.sock;   # sesuaikan: ls /run/php/
     }
     location ~ /\.(?!well-known).* { deny all; }
 }
@@ -78,7 +78,7 @@ server {
 (Apache: aktifkan `mod_rewrite`; `public/.htaccess` sudah ada.)
 
 Batas unggah PHP bawaan hanya 2 MB, sedangkan admin menerima foto sampai 8 MB (otomatis diperkecil
-ke maks. 1600 px). Naikkan di `php.ini` (mis. `/etc/php/8.3/fpm/php.ini`), lalu restart php-fpm:
+ke maks. 1600 px). Naikkan di `php.ini` (mis. `/etc/php/8.5/fpm/php.ini`), lalu restart php-fpm:
 
 ```ini
 upload_max_filesize = 10M
