@@ -12,8 +12,9 @@ MariaDB, Composer, database, `.env`, migrasi, konfigurasi Nginx).
 3. Jalankan VM, pasang Ubuntu. Centang **Install OpenSSH server**. Saran nama host: `web-smkibu`.
 4. Setelah selesai, login dan pasang agent + IP tetap:
    ```bash
-   sudo apt update && sudo apt install -y qemu-guest-agent && sudo systemctl enable --now qemu-guest-agent
+   sudo apt update && sudo apt install -y qemu-guest-agent && sudo systemctl start qemu-guest-agent
    ```
+   > Bila muncul pesan "unit files have no installation config" atau `start` gagal: itu normal (unit ini dijalankan otomatis oleh udev). Pastikan di Proxmox **Options → QEMU Guest Agent = Enabled**, lalu **Shutdown** dan **Start** ulang VM (bukan sekadar reboot); cek dengan `systemctl status qemu-guest-agent`.
    IP statis (contoh `192.168.10.20`; sesuaikan), edit `/etc/netplan/50-cloud-init.yaml`
    (nama file bisa berbeda; `ls /etc/netplan`):
    ```yaml
