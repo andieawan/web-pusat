@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Cadangan harian: dump database + foto unggahan. Jadwalkan lewat cron (lihat PANDUAN-VM.md).
 set -euo pipefail
-APP_DIR="${APP_DIR:-/var/www/web-smkibu-laravel}"
+APP_DIR="${APP_DIR:-/var/www/web-pusat}"
 TUJUAN="${TUJUAN:-/var/backups/smkibu}"
 SIMPAN_HARI="${SIMPAN_HARI:-14}"
 

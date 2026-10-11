@@ -37,7 +37,7 @@ Di VM (Ubuntu 26.04 memakai `sudo-rs`, jadi masuk dulu ke shell root agar variab
 
 ```bash
 sudo -i
-curl -fsSL https://raw.githubusercontent.com/andieawan/web-smkibu-laravel/main/deploy/install.sh -o install.sh
+curl -fsSL https://raw.githubusercontent.com/andieawan/web-pusat/main/deploy/install.sh -o install.sh
 DOMAIN=smkibupakusari.sch.id APP_URL=https://smkibupakusari.sch.id PROXY_IP=192.168.10.10 bash install.sh
 ```
 
@@ -45,7 +45,7 @@ DOMAIN=smkibupakusari.sch.id APP_URL=https://smkibupakusari.sch.id PROXY_IP=192.
   aplikasi, tiap aplikasi sebaiknya punya domain/subdomain sendiri).
 - `PROXY_IP` = IP VM/container NPMplus (satu IP persis, bukan seluruh LAN).
 - Mau coba dulu lewat IP tanpa domain? Jalankan `sudo bash install.sh` saja, lalu buka `http://<IP-VM>/`.
-  Kalau nanti pindah ke domain, ubah `APP_URL` di `/var/www/web-smkibu-laravel/.env`, lalu
+  Kalau nanti pindah ke domain, ubah `APP_URL` di `/var/www/web-pusat/.env`, lalu
   `sudo -u www-data php artisan config:cache`, dan ubah `server_name` di `/etc/nginx/sites-available/smkibu`.
 - **Catat email dan password admin** yang dicetak di akhir (hanya tampil sekali).
   Skrip aman dijalankan ulang: database dan `.env` yang sudah ada tidak ditimpa.
@@ -56,7 +56,7 @@ Dari komputer Anda (Windows PowerShell / terminal):
 
 ```bash
 scp logo.png gedung.jpg hero.jpg <user>@<IP-VM>:/tmp/
-ssh <user>@<IP-VM> "sudo mv /tmp/{logo.png,gedung.jpg,hero.jpg} /var/www/web-smkibu-laravel/public/images/"
+ssh <user>@<IP-VM> "sudo mv /tmp/{logo.png,gedung.jpg,hero.jpg} /var/www/web-pusat/public/images/"
 ```
 
 (Foto berita, galeri, dan banner diunggah dari panel admin.)
@@ -80,19 +80,40 @@ ssh <user>@<IP-VM> "sudo mv /tmp/{logo.png,gedung.jpg,hero.jpg} /var/www/web-smk
   dan **Banner Hero**, lalu tambah berita/pengumuman/agenda.
 - Ganti password admin kapan saja:
   ```bash
-  cd /var/www/web-smkibu-laravel
+  cd /var/www/web-pusat
   sudo -u www-data php artisan tinker
   >>> App\Models\User::where('is_admin', true)->first()->update(['password' => 'PASSWORD_BARU']);
   ```
+
+## 5b. Sambungkan ke Pusat Sekolah (opsional, bisa belakangan)
+
+Pasang **Pusat** lebih dulu (repo `pusat-sekolah`, `docs/PENYIAPAN-VM.md`). Lalu:
+
+1. Di server Pusat: `php artisan pusat:aplikasi-baru web --base-url=https://smkibupakusari.sch.id --redirect=https://smkibupakusari.sch.id/pusat/callback --webhook=https://smkibupakusari.sch.id/pusat/webhook` (catat kredensial; tampil sekali).
+2. Di VM website, edit `/var/www/web-pusat/.env`:
+   ```ini
+   PUSAT_ENABLED=true
+   PUSAT_URL=https://pusat.smkibupakusari.sch.id
+   PUSAT_CLIENT_ID=...
+   PUSAT_CLIENT_SECRET=...
+   PUSAT_WEBHOOK_SECRET=...
+   TRUSTED_PROXIES=192.168.10.10      # IP NPMplus
+   ```
+   ```bash
+   cd /var/www/web-pusat
+   sudo -u www-data php artisan migrate --force
+   sudo -u www-data php artisan config:cache
+   ```
+3. Uji tombol **Masuk lewat Pusat** di `/login`. Detail: [`docs/PUSAT.md`](../docs/PUSAT.md).
 
 ## 6. Pembaruan dan cadangan
 
 ```bash
 # Perbarui ke versi terbaru GitHub (otomatis maintenance mode, migrasi, cache)
-sudo bash /var/www/web-smkibu-laravel/deploy/update.sh
+sudo bash /var/www/web-pusat/deploy/update.sh
 
 # Cadangan harian pukul 01:30 (database + foto), simpan 14 hari di /var/backups/smkibu
-echo '30 1 * * * root /var/www/web-smkibu-laravel/deploy/backup.sh' | sudo tee /etc/cron.d/smkibu-backup
+echo '30 1 * * * root /var/www/web-pusat/deploy/backup.sh' | sudo tee /etc/cron.d/smkibu-backup
 ```
 
 Selain itu, buat jadwal **Datacenter → Backup** di Proxmox untuk VM ini (storage HDD-BACKUP, harian,
@@ -103,7 +124,7 @@ simpan beberapa versi). Pulihkan database dengan:
 
 | Gejala | Periksa |
 |---|---|
-| Halaman 500 | `sudo tail -50 /var/www/web-smkibu-laravel/storage/logs/laravel.log` dan `sudo tail /var/log/nginx/error.log` |
+| Halaman 500 | `sudo tail -50 /var/www/web-pusat/storage/logs/laravel.log` dan `sudo tail /var/log/nginx/error.log` |
 | 502 Bad Gateway | `systemctl status php8.5-fpm` (Ubuntu 26.04 memakai PHP 8.5; Ubuntu 24.04 memakai 8.3) |
 | Foto/ikon tidak tampil | `APP_URL` di `.env` harus sama dengan alamat yang dibuka; `ls -l public/storage` (symlink); setelah ubah `.env` jalankan `php artisan config:cache` |
 | Unggah foto gagal (413) | batas unggah: `/etc/php/*/fpm/conf.d/99-smkibu.ini` dan `client_max_body_size` di Nginx (sudah 10 MB) |

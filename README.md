@@ -9,13 +9,15 @@ Node.js **tidak diperlukan** (tidak ada build frontend).
 
 ## Instalasi (VM / server)
 
+> Sambung ke Pusat Sekolah (opsional): lihat [docs/PUSAT.md](docs/PUSAT.md) dan langkah 5b di PANDUAN-VM.
+
 > **Cara cepat untuk VM Ubuntu/Debian:** jalankan `deploy/install.sh` (otomatis). Panduan lengkap
 > Proxmox + NPMplus + Cloudflare ada di [`deploy/PANDUAN-VM.md`](deploy/PANDUAN-VM.md).
 > Langkah manual di bawah ini untuk yang ingin memasang sendiri.
 
 ```bash
-git clone https://github.com/andieawan/web-smkibu-laravel.git
-cd web-smkibu-laravel
+git clone https://github.com/andieawan/web-pusat.git
+cd web-pusat
 
 composer install --no-dev --optimize-autoloader
 cp .env.example .env
@@ -60,7 +62,7 @@ Arahkan *document root* ke folder `public/`. Contoh Nginx:
 server {
     listen 80;
     server_name smkibu.example.sch.id;
-    root /var/www/web-smkibu-laravel/public;
+    root /var/www/web-pusat/public;
     index index.php;
     client_max_body_size 10M;      # unggah foto sampai 8 MB
 

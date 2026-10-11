@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # Instalasi website SMKS Islam Bustanul Ulum di VM Ubuntu Server 24.04 / Debian 13 (jalankan sebagai root).
 #
-#   curl -fsSL https://raw.githubusercontent.com/andieawan/web-smkibu-laravel/main/deploy/install.sh -o install.sh
+#   curl -fsSL https://raw.githubusercontent.com/andieawan/web-pusat/main/deploy/install.sh -o install.sh
 #   sudo DOMAIN=smkibupakusari.sch.id bash install.sh
 #
 # Variabel opsional (awali perintah dengan NAMA=nilai):
 #   DOMAIN         nama domain website (default: _ = melayani akses lewat IP juga)
 #   APP_URL        alamat publik lengkap, mis. https://smkibupakusari.sch.id (default: http://$DOMAIN, atau http://IP-VM)
 #   PROXY_IP       IP reverse proxy (NPMplus) yang dipercaya; sebaiknya satu IP persis (default 192.168.10.0/24)
-#   APP_DIR        folder instalasi (default /var/www/web-smkibu-laravel)
+#   APP_DIR        folder instalasi (default /var/www/web-pusat)
 #   REPO           URL git (default repo resmi)
 #   SKIP_DB_INSTALL=1  jangan pasang MariaDB (pakai server MySQL/MariaDB yang sudah ada)
 #   DB_HOST/DB_NAME/DB_USER  (default 127.0.0.1 / smk_ibu / smk_ibu)
@@ -19,8 +19,8 @@ DOMAIN="${DOMAIN:-_}"
 IP="$(hostname -I 2>/dev/null | awk '{print $1}')"
 if [ "$DOMAIN" = "_" ]; then APP_URL="${APP_URL:-http://${IP:-localhost}}"; else APP_URL="${APP_URL:-http://$DOMAIN}"; fi
 PROXY_IP="${PROXY_IP:-192.168.10.0/24}"
-APP_DIR="${APP_DIR:-/var/www/web-smkibu-laravel}"
-REPO="${REPO:-https://github.com/andieawan/web-smkibu-laravel.git}"
+APP_DIR="${APP_DIR:-/var/www/web-pusat}"
+REPO="${REPO:-https://github.com/andieawan/web-pusat.git}"
 DB_HOST="${DB_HOST:-127.0.0.1}"
 DB_NAME="${DB_NAME:-smk_ibu}"
 DB_USER="${DB_USER:-smk_ibu}"
