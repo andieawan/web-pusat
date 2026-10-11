@@ -48,6 +48,11 @@ DOMAIN=smkibupakusari.sch.id APP_URL=https://smkibupakusari.sch.id PROXY_IP=192.
 - Mau coba dulu lewat IP tanpa domain? Jalankan `sudo bash install.sh` saja, lalu buka `http://<IP-VM>/`.
   Kalau nanti pindah ke domain, ubah `APP_URL` di `/var/www/web-pusat/.env`, lalu
   `sudo -u www-data php artisan config:cache`, dan ubah `server_name` di `/etc/nginx/sites-available/smkibu`.
+> **Repo privat? (muncul `Password authentication is not supported`)** GitHub tidak menerima password akun untuk git. Buat **token**:
+> GitHub → Settings → Developer settings → Personal access tokens → *Fine-grained tokens* → Repository access: hanya repo ini → Permissions: **Contents = Read-only**.
+> Skrip mengunduh lewat `curl`/`git` dan akan gagal untuk repo privat. Clone dulu manual: `git clone https://github.com/andieawan/web-pusat.git /var/www/web-pusat` (lalu jalankan `sudo bash /var/www/web-pusat/deploy/install.sh`, skrip mengenali folder yang sudah ada). Saat `git clone` diminta *Username* isi nama akun GitHub, *Password* isi **token** (bukan password akun). Agar `git pull` untuk pembaruan tidak meminta lagi:
+> `git config --global credential.helper store` (jalankan sebelum clone; token tersimpan di `~/.git-credentials` milik user ini). Jangan tempel token ke chat/dokumen. Alternatif: jadikan repo *Public*, atau pakai *Deploy key* (SSH).
+
 - **Catat email dan password admin** yang dicetak di akhir (hanya tampil sekali).
   Skrip aman dijalankan ulang: database dan `.env` yang sudah ada tidak ditimpa.
 
