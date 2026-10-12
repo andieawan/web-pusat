@@ -62,3 +62,10 @@ PUSAT_WEBHOOK_SECRET=...
 3. Email admin di Pusat harus sama dengan `ADMIN_EMAIL` (penautan pertama lewat email) dan akun itu harus punya peran **admin** untuk aplikasi "web". Uji tombol "Masuk lewat Pusat" di `/login`.
 
 Masalah umum (database, cookie, redirect_uri, port): lihat bagian terakhir `docs/PENYIAPAN-LOKAL.md` di repo `pusat-sekolah`.
+
+## Galat sertifikat HTTPS (cURL error 60)
+Bila situs lokal memakai HTTPS bersertifikat buatan sendiri (mis. envkit/mkcert), PHP menolaknya. Pilih satu di `.env` aplikasi ini, lalu `php artisan config:clear`:
+- `PUSAT_URL=http://...` bila Pusat juga bisa dibuka lewat http;
+- `PUSAT_CA_BUNDLE=C:\path\rootCA.pem` (berkas CA lokal; pemeriksaan tetap aktif) — disarankan;
+- `PUSAT_VERIFY_SSL=false` — hanya untuk uji lokal, jangan di server sungguhan.
+Di sisi Pusat (pengiriman webhook ke aplikasi ini) pakai `PUSAT_WEBHOOK_VERIFY_SSL=false` atau `PUSAT_WEBHOOK_CA_BUNDLE=...`. Pintasan: `php artisan pusat:siapkan-lokal ... --abaikan-ssl` (di folder Pusat) menuliskan keduanya.
