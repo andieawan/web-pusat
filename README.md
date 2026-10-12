@@ -109,6 +109,8 @@ bisa lebih dari satu, bergeser otomatis). Foto berita dan galeri juga diunggah d
 
 ## Pengembangan lokal
 
+> Coba di Windows (Laragon) bersama Pusat: [docs/PENYIAPAN-LOKAL.md](docs/PENYIAPAN-LOKAL.md).
+
 ```bash
 composer install
 cp .env.example .env && php artisan key:generate
