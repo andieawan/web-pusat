@@ -8,6 +8,8 @@ artisan() { runuser -u www-data -- php "$APP_DIR/artisan" "$@"; }
 artisan down --retry=30 || true
 trap 'artisan up || true' EXIT
 
+# vendor/ ikut di repo; composer bisa mengubah berkas autoload -> kembalikan dulu agar pull tidak bentrok
+git ls-files -m -- vendor | xargs -r git checkout --
 git pull --ff-only
 
 # Pengerasan & kompresi Nginx (idempotent; aman dijalankan berulang).
@@ -34,4 +36,5 @@ artisan route:cache
 artisan view:cache
 PHPV="$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')"
 systemctl reload "php${PHPV}-fpm"
+artisan web:periksa || echo "PERHATIAN: ada masalah di atas — perbaiki sebelum dipakai."
 echo "Selesai diperbarui: $(git log --oneline -1)"

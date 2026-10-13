@@ -1,5 +1,8 @@
 # Website SMKS Islam Bustanul Ulum Pakusari - Jember
 
+
+> **Produksi:** urutan lengkap Pusat → aplikasi ada di [runbook Pusat](https://github.com/andieawan/pusat-sekolah/blob/main/docs/PRODUKSI.md). Cek kesiapan server kapan saja: `php artisan web:periksa`.
+
 Laravel 13 + MySQL. Beranda (dengan banner geser), berita + pencarian, pengumuman, agenda, galeri,
 dan panel admin untuk mengelola semuanya (berita, pengumuman, agenda, galeri, program keahlian,
 banner hero, pengaturan situs). Font dan ikon sudah lokal, jadi tidak butuh internet saat dibuka.

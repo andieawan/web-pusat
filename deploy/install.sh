@@ -66,9 +66,10 @@ if [ -d "$APP_DIR/.git" ]; then
 else
     [ ! -e "$APP_DIR" ] || [ -z "$(ls -A "$APP_DIR")" ] || gagal "$APP_DIR sudah ada dan bukan repo git."
     mkdir -p "$(dirname "$APP_DIR")"
-    git clone "$REPO" "$APP_DIR"
+    git clone "$REPO" "$APP_DIR" || gagal "git clone gagal. Jika repo PRIVATE: buat token GitHub (Contents: read-only), jalankan  git config --global credential.helper store  lalu  git clone $REPO $APP_DIR  sekali secara manual (isi username + token), lalu jalankan skrip ini lagi."
 fi
 cd "$APP_DIR"
+git config --global --add safe.directory "$APP_DIR" 2>/dev/null || true
 
 info "Memasang dependensi Composer (tanpa paket dev)"
 COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-interaction
@@ -179,6 +180,9 @@ ln -sf /etc/nginx/sites-available/smkibu /etc/nginx/sites-enabled/smkibu
 nginx -t
 systemctl enable --now nginx
 systemctl reload nginx
+
+# Pemeriksaan akhir kesiapan
+artisan web:periksa || true
 
 # ---------------------------------------------------------------- 6. Selesai
 chown -R www-data:www-data storage bootstrap/cache
