@@ -319,9 +319,8 @@ class WebsiteTest extends TestCase
     {
         Storage::fake('public');
         $admin = $this->admin();
-        Pengaturan::simpan('profil_sambutan', 'Selamat datang.');
-
-        $this->actingAs($admin)->put('/admin/pengaturan', ['foto_kepsek' => UploadedFile::fake()->image('kepsek.jpg', 2400, 1800)])
+        // Formulir pengaturan selalu mengirim semua isian; isian yang tidak dikirim dianggap kosong.
+        $this->actingAs($admin)->put('/admin/pengaturan', ['profil_sambutan' => 'Selamat datang.', 'foto_kepsek' => UploadedFile::fake()->image('kepsek.jpg', 2400, 1800)])
             ->assertSessionHasNoErrors();
         $foto = Pengaturan::ambil('profil_foto_kepsek');
         $this->assertNotEmpty($foto);
@@ -425,6 +424,7 @@ class WebsiteTest extends TestCase
         $this->assertStringContainsString('no-store', $respons->headers->get('Cache-Control'));
         $respons->assertDontSee('onsubmit=', false)->assertSee('data-konfirmasi', false);
 
+        auth()->logout(); // halaman login untuk tamu (yang sudah login diarahkan ke panel)
         $login = $this->get('/login')->assertOk();
         $this->assertStringContainsString("script-src 'self'", $login->headers->get('Content-Security-Policy'));
 
