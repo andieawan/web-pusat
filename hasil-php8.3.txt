@@ -1,96 +1,10 @@
+PHPUnit 12.5.38 by Sebastian Bergmann and contributors.
 
-   PASS  Tests\Unit\ExampleTest
-  ✓ that true is true
+Runtime:       PHP 8.3.35
+Configuration: /home/runner/work/web-pusat/web-pusat/phpunit.xml
 
-   PASS  Tests\Feature\PusatTest
-  ✓ tombol hanya tampil saat aktif                                       0.12s  
-  ✓ mulai mengarah ke pusat dengan pkce dan redirect uri                 0.01s  
-  ✓ admin pusat membuat akun baru dan bisa membuka panel                 0.05s  
-  ✓ akun lokal dengan email sama ditautkan bukan digandakan              0.01s  
-  ✓ tanpa peran admin atau tanpa email ditolak                           0.01s  
-  ✓ state salah ditolak dan email tertaut akun lain ditolak              0.01s  
-  ✓ keluar dari sesi pusat juga keluar dari pusat                        0.01s  
-  ✓ statistik beranda dari pusat dan cadangan saat pusat mati            0.03s  
-  ✓ pusat mati memakai salinan terakhir yang berhasil                    0.02s  
-  ✓ tanpa integrasi beranda memakai angka manual dan tidak memanggil pu… 0.02s  
-  ✓ dasbor menampilkan jurusan pusat yang belum ada di website           0.01s  
-  ✓ webhook tanda tangan salah ditolak                                   0.01s  
-  ✓ webhook mencabut admin dan sesi langsung tertolak                    0.04s  
-  ✓ webhook mati bila integrasi nonaktif                                 0.01s  
+..................................................                50 / 50 (100%)
 
-   FAIL  Tests\Feature\WebsiteTest
-  ✓ beranda tampil dengan data demo                                      0.03s  
-  ✓ banner aktif tampil dan nonaktif tidak                               0.02s  
-  ✓ berita daftar detail dan pencarian                                   0.03s  
-  ✓ berita tidak terbit tidak bisa dibuka                                0.02s  
-  ✓ halaman pengumuman agenda dan galeri                                 0.02s  
-  ✓ tautan sosmed hanya tampil bila diisi                                0.02s  
-  ✓ seeder membuat satu admin dan tidak menimpa password                 0.02s  
-  ✓ admin wajib login                                                    0.02s  
-  ✓ user biasa tidak boleh masuk admin                                   0.02s  
-  ✓ user biasa tidak bisa login lewat form admin                         0.22s  
-  ✓ login admin dan buka dashboard                                       0.03s  
-  ✓ login gagal dengan password salah                                    0.22s  
-  ✓ admin bisa menambah pengumuman dan kategori divalidasi               0.02s  
-  ✓ berita bisa disembunyikan lewat kotak centang                        0.02s  
-  ✓ foto besar otomatis diperkecil                                       0.19s  
-  ✓ banner wajib punya foto                                              0.08s  
-  ✓ pengaturan menolak tautan berbahaya                                  0.03s  
-  ✓ ikon program keahlian harus berformat bootstrap icons                0.02s  
-  ✓ halaman profil menampilkan isian admin dan menyembunyikan yang koso… 0.02s  
-  ✓ teks halaman di escape dari html                                     0.02s  
-  ✓ halaman akademik dan kesiswaan tampil                                0.02s  
-  ✓ admin mengelola ekskul dan staf dan ikon divalidasi                  0.02s  
-  ✓ halaman konten baru hanya untuk admin                                0.02s  
-  ✓ pengaturan halaman disimpan dan dibatasi panjangnya                  0.03s  
-  ✓ admin bisa mengunggah dan menghapus logo                             0.03s  
-  ✓ css diberi versi agar cache ikut diperbarui                          0.02s  
-  ⨯ admin bisa mengunggah foto kepala sekolah dan tampil di profil       0.11s  
-  ✓ admin bisa ganti password sendiri                                    0.03s  
-  ✓ admin bisa menambah akun admin lain yang bisa login                  0.03s  
-  ✓ admin tidak bisa menghapus akun sendiri tapi bisa menghapus lain     0.02s  
-  ✓ user biasa tidak bisa membuka manajemen pengguna                     0.02s  
-  ✓ dashboard tampil dengan ringkasan dan kelengkapan                    0.02s  
-  ⨯ halaman admin memakai csp ketat dan tidak di cache                   0.02s  
-  ✓ email berkutip tidak bisa menyuntik js di dialog hapus               0.02s  
-  ✓ login dibatasi per email setelah 5 percobaan gagal                   1.23s  
-  ────────────────────────────────────────────────────────────────────────────  
-   FAILED  Tests\Feature\WebsiteTest > admin bisa mengunggah foto kepala sek…   
-  Expected: <!DOCTYPE html>\n
-  <html lang="id">\n
-  <head>\n
-  ... (132 more lines)
+Time: 00:02.729, Memory: 62.50 MB
 
-  To contain: foto-kepsek-iWMnCbNGeRJKW3mKhHni.jpg
-
-  at tests/Feature/WebsiteTest.php:332
-    328▕         Storage::disk('public')->assertExists($foto);
-    329▕         [$lebar] = getimagesizefromstring(Storage::disk('public')->get($foto));
-    330▕         $this->assertLessThanOrEqual(800, $lebar);
-    331▕ 
-  ➜ 332▕         $this->get('/profil')->assertOk()->assertSee(basename($foto));
-    333▕ 
-    334▕         $this->actingAs($admin)->put('/admin/pengaturan', ['hapus_foto_kepsek' => '1'])->assertSessionHasNoErrors();
-    335▕         Storage::disk('public')->assertMissing($foto);
-    336▕         $this->assertEmpty(Pengaturan::ambil('profil_foto_kepsek'));
-
-  ────────────────────────────────────────────────────────────────────────────  
-   FAILED  Tests\Feature\WebsiteTest > halaman admin memakai csp ketat dan t…   
-  Expected response status code [200] but received 302.
-Failed asserting that 302 is identical to 200.
-
-  at tests/Feature/WebsiteTest.php:428
-    424▕         $this->assertStringContainsString("script-src 'self'", $respons->headers->get('Content-Security-Policy'));
-    425▕         $this->assertStringContainsString('no-store', $respons->headers->get('Cache-Control'));
-    426▕         $respons->assertDontSee('onsubmit=', false)->assertSee('data-konfirmasi', false);
-    427▕ 
-  ➜ 428▕         $login = $this->get('/login')->assertOk();
-    429▕         $this->assertStringContainsString("script-src 'self'", $login->headers->get('Content-Security-Policy'));
-    430▕ 
-    431▕         $this->get('/')->assertOk()->assertHeader('Permissions-Policy');
-    432▕     }
-
-
-  Tests:    2 failed, 48 passed (242 assertions)
-  Duration: 3.11s
-
+OK (50 tests, 248 assertions)
