@@ -15,10 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias(['admin' => EnsureAdmin::class]);
-        // Di belakang proxy HTTPS (NPMplus, Cloudflare): isi TRUSTED_PROXIES di .env ('*' atau daftar IP dipisah koma).
-        if ($proxies = env('TRUSTED_PROXIES')) {
-            $middleware->trustProxies(at: $proxies === '*' ? '*' : array_map('trim', explode(',', $proxies)));
-        }
+        // Proxy tepercaya (TRUSTED_PROXIES) dipasang di AppServiceProvider dari config: callback ini berjalan
+        // sebelum .env dimuat, sehingga env() di sini selalu kosong.
         $middleware->validateCsrfTokens(except: ['pusat/webhook']); // dipanggil server Pusat; diamankan tanda tangan HMAC
         $middleware->appendToGroup('web', HeaderKeamanan::class);
     })
