@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Perbarui website ke versi terbaru di GitHub (jalankan sebagai root di VM).
 set -euo pipefail
-APP_DIR="${APP_DIR:-/var/www/web-pusat}"
+APP_DIR="${APP_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"  # bawaan: folder tempat skrip ini berada
 cd "$APP_DIR"
 artisan() { runuser -u www-data -- php "$APP_DIR/artisan" "$@"; }
 
