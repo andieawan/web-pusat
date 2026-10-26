@@ -106,7 +106,8 @@ SQL
         -e "s|^DB_DATABASE=.*|DB_DATABASE=${DB_NAME}|" \
         -e "s|^DB_USERNAME=.*|DB_USERNAME=${DB_USER}|" \
         -e "s|^DB_PASSWORD=.*|DB_PASSWORD=${DB_PASS}|" \
-        -e "s|^ADMIN_PASSWORD=.*|ADMIN_PASSWORD=|" .env
+        -e "s|^ADMIN_PASSWORD=.*|ADMIN_PASSWORD=|" \
+        -e "s|^TRUSTED_PROXIES=.*|TRUSTED_PROXIES=${PROXY_IP}|" .env
     case "$APP_URL" in https://*) sed -i 's|^SESSION_SECURE_COOKIE=.*|SESSION_SECURE_COOKIE=true|' .env ;; esac
     php artisan key:generate --force
     chown root:www-data .env
@@ -180,6 +181,12 @@ ln -sf /etc/nginx/sites-available/smkibu /etc/nginx/sites-enabled/smkibu
 nginx -t
 systemctl enable --now nginx
 systemctl reload nginx
+
+# Backup harian 01:30 (database + foto), simpan 14 hari di /var/backups/smkibu
+if [ ! -f /etc/cron.d/smkibu-backup ]; then
+    echo "30 1 * * * root APP_DIR=$APP_DIR bash $APP_DIR/deploy/backup.sh >> /var/log/smkibu-backup.log 2>&1" > /etc/cron.d/smkibu-backup
+    chmod 644 /etc/cron.d/smkibu-backup
+fi
 
 # Pemeriksaan akhir kesiapan
 artisan web:periksa || true
