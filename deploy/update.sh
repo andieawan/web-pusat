@@ -28,6 +28,11 @@ if [ -d /etc/nginx/conf.d ]; then
     } > /etc/nginx/conf.d/smkibu-hardening.conf
     if nginx -t 2>/dev/null; then systemctl reload nginx; else rm -f /etc/nginx/conf.d/smkibu-hardening.conf; echo "PERINGATAN: konfigurasi hardening Nginx dilewati (nginx -t gagal)."; fi
 fi
+# Jadwal backup harian 01:30 (dipasang sekali; tidak menimpa jadwal yang sudah diatur)
+if [ ! -f /etc/cron.d/smkibu-backup ]; then
+    echo "30 1 * * * root APP_DIR=$APP_DIR bash $APP_DIR/deploy/backup.sh >> /var/log/smkibu-backup.log 2>&1" > /etc/cron.d/smkibu-backup
+    chmod 644 /etc/cron.d/smkibu-backup
+fi
 COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-interaction
 chown -R www-data:www-data storage bootstrap/cache
 artisan migrate --force
