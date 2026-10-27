@@ -3,8 +3,370 @@ PHPUnit 12.5.38 by Sebastian Bergmann and contributors.
 Runtime:       PHP 8.3.36
 Configuration: /home/runner/work/web-pusat/web-pusat/phpunit.xml
 
-.....................................................             53 / 53 (100%)
+..................F..................................             53 / 53 (100%)
 
-Time: 00:04.831, Memory: 62.50 MB
+Time: 00:04.764, Memory: 62.50 MB
 
-OK (53 tests, 279 assertions)
+There was 1 failure:
+
+1) Tests\Feature\WebsiteTest::test_beranda_tampil_dengan_data_demo
+Failed asserting that '<!DOCTYPE html>\n
+<html lang="id">\n
+<head>\n
+    <meta charset="utf-8">\n
+    <meta name="viewport" content="width=device-width, initial-scale=1">\n
+    <title>SMKS Islam Bustanul Ulum Pakusari - Jember</title>\n
+    <link href="http://localhost:8000/css/fonts.css?v=1793083947" rel="stylesheet">\n
+    <link href="http://localhost:8000/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">\n
+    <link rel="icon" href="http://localhost:8000/images/logo.png">\n
+    <link href="http://localhost:8000/css/site.css?v=1793083947" rel="stylesheet">\n
+</head>\n
+<body>\n
+\n
+\n
+<div class="topbar">\n
+    <div class="container topbar__inner">\n
+        <div class="topbar__info">\n
+            <span><i class="bi bi-geo-alt-fill"></i> Jl. Raya Pakusari No. 45, Pakusari - Jember</span>\n
+            <span><i class="bi bi-telephone-fill"></i> (0331) 593XXX</span>\n
+            <span><i class="bi bi-envelope-fill"></i> smksibp@gmail.com</span>\n
+        </div>\n
+        <div class="topbar__sosmed">\n
+                    </div>\n
+    </div>\n
+</div>\n
+\n
+\n
+<header class="navbar">\n
+    <div class="container navbar__inner">\n
+        <a href="http://localhost:8000" class="brand">\n
+            <img src="http://localhost:8000/images/logo.png" alt="Logo" class="brand__logo" onerror="this.style.display='none'">\n
+            <span class="brand__text">\n
+                <strong>SMKS ISLAM<br>BUSTANUL ULUM</strong>\n
+                <small>PAKUSARI - JEMBER</small>\n
+            </span>\n
+        </a>\n
+\n
+        <button class="navbar__toggle" onclick="document.getElementById('menu').classList.toggle('open')" aria-label="Menu">\n
+            <i class="bi bi-list"></i>\n
+        </button>\n
+\n
+        <nav id="menu" class="menu">\n
+            <a href="http://localhost:8000" class="active">Beranda</a>\n
+            <a href="http://localhost:8000/profil" class="">Profil</a>\n
+            <a href="http://localhost:8000/akademik" class="">Akademik</a>\n
+            <a href="http://localhost:8000/kesiswaan" class="">Kesiswaan</a>\n
+            <a href="http://localhost:8000/berita" class="">Berita</a>\n
+            <a href="http://localhost:8000/galeri" class="">Galeri</a>\n
+            <a href="http://localhost:8000/ppdb" class="">PPDB</a>\n
+        </nav>\n
+\n
+        <div class="navbar__aksi">\n
+            <button type="button" class="btn-cari" aria-label="Cari berita" aria-controls="cari"\n
+                    onclick="var f=document.getElementById('cari');f.classList.toggle('open');if(f.classList.contains('open'))f.querySelector('input').focus()"><i class="bi bi-search"></i></button>\n
+                            <a href="http://localhost:8000/login" class="btn btn--primary"><strong>Login</strong> <i class="bi bi-person-fill"></i></a>\n
+                    </div>\n
+    </div>\n
+</header>\n
+\n
+<form id="cari" class="cari " action="http://localhost:8000/berita" method="get" role="search">\n
+    <div class="container cari__isi">\n
+        <input type="search" name="q" value="" placeholder="Cari berita..." maxlength="100" aria-label="Kata kunci">\n
+        <button type="submit" class="btn btn--primary">Cari</button>\n
+    </div>\n
+</form>\n
+\n
+<main>\n
+    \n
+\n
+\n
+<section class="hero" data-slider>\n
+        <div class="container hero__inner">\n
+        <div class="hero__teks">\n
+            <span class="hero__kecil">SELAMAT DATANG DI</span>\n
+            <h1>SMKS ISLAM<br><em>BUSTANUL ULUM</em><br><span>PAKUSARI - JEMBER</span></h1>\n
+            <p class="hero__motto">“Mencetak Generasi Unggul, Berakhlak Mulia<br>dan Siap Kerja di Era Global”</p>\n
+            <a href="http://localhost:8000/profil" class="btn btn--primary">Kenali Sekolah Kami <i class="bi bi-arrow-right"></i></a>\n
+        </div>\n
+    </div>\n
+    </section>\n
+\n
+\n
+<section class="container statistik">\n
+            <div class="stat">\n
+            <div class="stat__ikon"><i class="bi bi-mortarboard-fill"></i></div>\n
+            <div>\n
+                <small>Siswa Aktif</small>\n
+                <b>682</b>\n
+                <span>Peserta didik</span>\n
+            </div>\n
+        </div>\n
+            <div class="stat">\n
+            <div class="stat__ikon"><i class="bi bi-people-fill"></i></div>\n
+            <div>\n
+                <small>Guru &amp; Staff</small>\n
+                <b>48</b>\n
+                <span>Pendidik dan tenaga kependidikan</span>\n
+            </div>\n
+        </div>\n
+            <div class="stat">\n
+            <div class="stat__ikon"><i class="bi bi-trophy-fill"></i></div>\n
+            <div>\n
+                <small>Prestasi</small>\n
+                <b>120+</b>\n
+                <span>Penghargaan tingkat kabupaten hingga nasional</span>\n
+            </div>\n
+        </div>\n
+            <div class="stat">\n
+            <div class="stat__ikon"><i class="bi bi-book-half"></i></div>\n
+            <div>\n
+                <small>Program Keahlian</small>\n
+                <b>5</b>\n
+                <span>Kompetensi keahlian unggulan</span>\n
+            </div>\n
+        </div>\n
+    </section>\n
+\n
+\n
+<section class="container dua-kolom">\n
+    <div>\n
+        <div class="judul-seksi">\n
+            <h2>Berita Terbaru</h2>\n
+            <a href="http://localhost:8000/berita" class="lihat">Lihat Semua <i class="bi bi-arrow-right"></i></a>\n
+        </div>\n
+        <div class="berita">\n
+                            <article class="kartu">\n
+                    <div class="kartu__gambar" ></div>\n
+                    <div class="kartu__isi">\n
+                        <div class="kartu__meta">\n
+                            <span><i class="bi bi-calendar3"></i> 24 Okt 2026</span>\n
+                            <span class="label label--blue">Kegiatan</span>\n
+                        </div>\n
+                        <h3>SMKS Islam Bustanul Ulum Gelar Halal bi Halal dan Silaturahmi</h3>\n
+                        <p>Keluarga besar SMKS Islam Bustanul Ulum Pakusari Jember menggelar kegiatan Halal bi Halal untuk mempererat tali silaturahmi antara guru, karyawan, dan siswa.</p>\n
+                        <a href="http://localhost:8000/berita/smks-islam-bustanul-ulum-gelar-halal-bi-halal-dan-silaturahmi-6f64" class="selengkapnya">Selengkapnya <i class="bi bi-arrow-right"></i></a>\n
+                    </div>\n
+                </article>\n
+                            <article class="kartu">\n
+                    <div class="kartu__gambar" ></div>\n
+                    <div class="kartu__isi">\n
+                        <div class="kartu__meta">\n
+                            <span><i class="bi bi-calendar3"></i> 17 Okt 2026</span>\n
+                            <span class="label label--green">Prestasi</span>\n
+                        </div>\n
+                        <h3>Siswa SMKS Islam Bustanul Ulum Raih Juara 2 LKS Tingkat Kabupaten</h3>\n
+                        <p>Alhamdulillah, siswa kami berhasil meraih Juara 2 dalam Lomba Kompetensi Siswa (LKS) Tingkat Kabupaten Jember pada bidang Teknik Komputer dan Jaringan.</p>\n
+                        <a href="http://localhost:8000/berita/siswa-smks-islam-bustanul-ulum-raih-juara-2-lks-tingkat-kabupaten-vq5k" class="selengkapnya">Selengkapnya <i class="bi bi-arrow-right"></i></a>\n
+                    </div>\n
+                </article>\n
+                            <article class="kartu">\n
+                    <div class="kartu__gambar" ></div>\n
+                    <div class="kartu__isi">\n
+                        <div class="kartu__meta">\n
+                            <span><i class="bi bi-calendar3"></i> 10 Okt 2026</span>\n
+                            <span class="label label--blue">Informasi</span>\n
+                        </div>\n
+                        <h3>Pembukaan Pendaftaran PPDB Tahun Ajaran Baru</h3>\n
+                        <p>Pendaftaran peserta didik baru (PPDB) SMKS Islam Bustanul Ulum Pakusari Jember telah dibuka. Segera daftarkan diri Anda dan jadi bagian dari keluarga besar kami.</p>\n
+                        <a href="http://localhost:8000/berita/pembukaan-pendaftaran-ppdb-tahun-ajaran-baru-inb6" class="selengkapnya">Selengkapnya <i class="bi bi-arrow-right"></i></a>\n
+                    </div>\n
+                </article>\n
+                    </div>\n
+    </div>\n
+\n
+    <aside class="panel pengumuman">\n
+        <div class="judul-seksi">\n
+            <h2><i class="bi bi-megaphone-fill"></i> Pengumuman</h2>\n
+            <a href="http://localhost:8000/pengumuman" class="lihat">Lihat Semua <i class="bi bi-arrow-right"></i></a>\n
+        </div>\n
+                    <div class="item-tgl">\n
+                <div class="tgl"><b>22</b><span>Okt</span></div>\n
+                <div><p>Jadwal Ujian Tengah Semester</p><small>Akademik</small></div>\n
+            </div>\n
+                    <div class="item-tgl">\n
+                <div class="tgl"><b>15</b><span>Okt</span></div>\n
+                <div><p>Libur Hari Raya</p><small>Kesiswaan</small></div>\n
+            </div>\n
+                    <div class="item-tgl">\n
+                <div class="tgl"><b>07</b><span>Okt</span></div>\n
+                <div><p>Pengumuman Kelulusan Kelas XII</p><small>Akademik</small></div>\n
+            </div>\n
+                    <div class="item-tgl">\n
+                <div class="tgl"><b>01</b><span>Okt</span></div>\n
+                <div><p>Pembagian Raport Semester</p><small>Akademik</small></div>\n
+            </div>\n
+            </aside>\n
+</section>\n
+\n
+\n
+<section class="container dua-kolom dua-kolom--tentang">\n
+    <div class="tentang">\n
+        <div class="tentang__gambar" ></div>\n
+        <div>\n
+            <small class="tentang__label">Tentang Kami</small>\n
+            <h2>SMK Islam Bustanul Ulum<br>Pakusari Jember</h2>\n
+            <p>SMKS Islam Bustanul Ulum Pakusari Jember adalah sekolah menengah kejuruan yang berlandaskan nilai-nilai Islam dan berkomitmen untuk mencetak lulusan yang kompeten, berakhlak mulia, serta siap menghadapi dunia kerja dan melanjutkan pendidikan ke jenjang yang lebih tinggi.</p>\n
+            <a href="http://localhost:8000/profil" class="btn btn--primary">Selengkapnya <i class="bi bi-arrow-right"></i></a>\n
+        </div>\n
+    </div>\n
+\n
+    <div class="keahlian">\n
+        <div class="judul-seksi">\n
+            <h2 class="h2-kecil"><i class="bi bi-megaphone-fill"></i> Program Keahlian</h2>\n
+            <a href="http://localhost:8000/akademik" class="lihat">Lihat Semua <i class="bi bi-arrow-right"></i></a>\n
+        </div>\n
+        <div class="keahlian__grid">\n
+                            <div class="keahlian__item">\n
+                    <i class="bi bi-pc-display"></i>\n
+                    <span>Teknik Komputer dan Jaringan (TKJ)</span>\n
+                </div>\n
+                            <div class="keahlian__item">\n
+                    <i class="bi bi-code-square"></i>\n
+                    <span>Multimedia (MM)</span>\n
+                </div>\n
+                            <div class="keahlian__item">\n
+                    <i class="bi bi-calculator"></i>\n
+                    <span>Akuntansi (AK)</span>\n
+                </div>\n
+                            <div class="keahlian__item">\n
+                    <i class="bi bi-file-earmark-text"></i>\n
+                    <span>Otomatisasi Tata Kelola Perkantoran (OTKP)</span>\n
+                </div>\n
+                            <div class="keahlian__item">\n
+                    <i class="bi bi-code-slash"></i>\n
+                    <span>Rekayasa Perangkat Lunak (RPL)</span>\n
+                </div>\n
+                    </div>\n
+    </div>\n
+</section>\n
+\n
+\n
+<section class="banner">\n
+    <div class="container banner__inner">\n
+        <i class="bi bi-mortarboard-fill banner__ikon"></i>\n
+        <div class="banner__teks">\n
+            <h3>Berilmu, Berakhlak, dan Siap Berkarya</h3>\n
+            <p>Bersama SMKS Islam Bustanul Ulum, wujudkan masa depan yang lebih baik.</p>\n
+        </div>\n
+        <blockquote>\n
+            “Pendidikan adalah investasi terbaik untuk masa depan.”\n
+            <cite>— SMKS Islam Bustanul Ulum</cite>\n
+        </blockquote>\n
+    </div>\n
+</section>\n
+\n
+\n
+<section class="container dua-kolom dua-kolom--galeri">\n
+    <div>\n
+        <div class="judul-seksi">\n
+            <h2 class="h2-kecil"><i class="bi bi-camera-fill"></i> Galeri Kegiatan</h2>\n
+            <a href="http://localhost:8000/galeri" class="lihat">Lihat Semua <i class="bi bi-arrow-right"></i></a>\n
+        </div>\n
+        <div class="galeri">\n
+                    </div>\n
+    </div>\n
+\n
+    <aside>\n
+        <div class="judul-seksi">\n
+            <h2 class="h2-kecil"><i class="bi bi-calendar-week-fill"></i> Agenda Sekolah</h2>\n
+            <a href="http://localhost:8000/agenda" class="lihat">Lihat Semua <i class="bi bi-arrow-right"></i></a>\n
+        </div>\n
+                    <div class="item-tgl item-tgl--garis">\n
+                <div class="tgl tgl--putih"><b>30</b><span>Okt</span></div>\n
+                <div><p>Ujian Praktik Kejuruan (UPK)</p><small>07.00 - Selesai</small></div>\n
+            </div>\n
+                    <div class="item-tgl item-tgl--garis">\n
+                <div class="tgl tgl--putih"><b>04</b><span>Nov</span></div>\n
+                <div><p>Rapat Wali Murid</p><small>09.00 - 12.00</small></div>\n
+            </div>\n
+                    <div class="item-tgl item-tgl--garis">\n
+                <div class="tgl tgl--putih"><b>10</b><span>Nov</span></div>\n
+                <div><p>Peringatan Hari Besar Nasional</p><small>08.00 - Selesai</small></div>\n
+            </div>\n
+                    <div class="item-tgl item-tgl--garis">\n
+                <div class="tgl tgl--putih"><b>17</b><span>Nov</span></div>\n
+                <div><p>Pesantren Kilat</p><small>08.00 - 15.00</small></div>\n
+            </div>\n
+            </aside>\n
+</section>\n
+\n
+<script>\n
+(function () {\n
+    var hero = document.querySelector('[data-slider]');\n
+    if (!hero) return;\n
+    var slide = hero.querySelectorAll('.hero__bg');\n
+    if (slide.length < 2) return;\n
+    var i = 0, timer;\n
+    function pindah(n) {\n
+        slide[i].classList.remove('on');\n
+        i = (n + slide.length) % slide.length;\n
+        slide[i].classList.add('on');\n
+    }\n
+    function otomatis() {\n
+        clearInterval(timer);\n
+        timer = setInterval(function () { pindah(i + 1); }, 6000);\n
+    }\n
+    hero.querySelector('.hero__nav--kiri').addEventListener('click', function () { pindah(i - 1); otomatis(); });\n
+    hero.querySelector('.hero__nav--kanan').addEventListener('click', function () { pindah(i + 1); otomatis(); });\n
+    otomatis();\n
+})();\n
+</script>\n
+\n
+</main>\n
+\n
+\n
+<footer class="footer">\n
+    <div class="container footer__grid">\n
+        <div>\n
+            <a href="http://localhost:8000" class="brand brand--light">\n
+                <img src="http://localhost:8000/images/logo.png" alt="Logo" class="brand__logo" onerror="this.style.display='none'">\n
+                <span class="brand__text"><strong>SMKS ISLAM<br>BUSTANUL ULUM</strong><small>PAKUSARI - JEMBER</small></span>\n
+            </a>\n
+            <p class="footer__desc">SMKS Islam Bustanul Ulum Jember berkomitmen mencetak lulusan yang kompeten, berakhlak mulia, dan siap kerja.</p>\n
+        </div>\n
+        <div>\n
+            <h4>Tautan Cepat</h4>\n
+            <div class="footer__links">\n
+                <a href="http://localhost:8000">Beranda</a><a href="http://localhost:8000/berita">Berita</a>\n
+                <a href="http://localhost:8000/profil">Profil Sekolah</a><a href="http://localhost:8000/galeri">Galeri</a>\n
+                <a href="http://localhost:8000/akademik">Akademik</a><a href="http://localhost:8000/ppdb">PPDB</a>\n
+                <a href="http://localhost:8000/kesiswaan">Kesiswaan</a>\n
+            </div>\n
+        </div>\n
+        <div>\n
+            <h4 id="kontak">Kontak Kami</h4>\n
+            <ul class="footer__kontak">\n
+                <li><i class="bi bi-geo-alt-fill"></i> Jl. Raya Pakusari No. 45, Pakusari - Jember</li>\n
+                <li><i class="bi bi-telephone-fill"></i> (0331) 593XXX</li>\n
+                <li><i class="bi bi-envelope-fill"></i> smksibp@gmail.com</li>\n
+            </ul>\n
+        </div>\n
+        <div>\n
+            <h4>Ikuti Kami</h4>\n
+            <div class="footer__sosmed">\n
+                            </div>\n
+        </div>\n
+        <a href="http://localhost:8000/ppdb" class="footer__ppdb">\n
+            <i class="bi bi-laptop"></i>\n
+            <span><strong>PPDB Online</strong><small>Daftar sekarang untuk masa depanmu</small></span>\n
+            <i class="bi bi-arrow-right"></i>\n
+        </a>\n
+    </div>\n
+    <div class="footer__bawah">\n
+        <div class="container">\n
+            <span>© 2026 SMKS Islam Bustanul Ulum Pakusari Jember. All rights reserved.</span>\n
+            <span class="footer__bawah-nav"><a href="http://localhost:8000">Beranda</a> | <a href="http://localhost:8000/profil">Profil</a> | <a href="#kontak">Kontak</a></span>\n
+        </div>\n
+    </div>\n
+</footer>\n
+\n
+</body>\n
+</html>\n
+' [UTF-8](length: 16424) contains "images/hero.jpg" [ASCII](length: 15).
+
+/home/runner/work/web-pusat/web-pusat/vendor/laravel/framework/src/Illuminate/Testing/TestResponseAssert.php:46
+/home/runner/work/web-pusat/web-pusat/vendor/laravel/framework/src/Illuminate/Testing/TestResponse.php:720
+/home/runner/work/web-pusat/web-pusat/tests/Feature/WebsiteTest.php:45
+
+FAILURES!
+Tests: 53, Assertions: 279, Failures: 1.
