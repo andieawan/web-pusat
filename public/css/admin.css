@@ -23,8 +23,10 @@ body.admin{display:flex;min-height:100vh}
 .side__logo{width:40px;height:40px;border-radius:10px;background:#fff;object-fit:contain;padding:3px;flex:none}
 .side__nama{font-weight:700;color:#fff;font-size:15px;line-height:1.2}
 .side__nama small{display:block;font-weight:400;font-size:11.5px;color:#9db8e6;margin-top:2px}
-.side nav{padding:4px 12px;flex:1;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;display:flex;flex-direction:column;justify-content:center}
-.side nav::-webkit-scrollbar{display:none}
+.side nav{padding:4px 12px;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#ffffff33 transparent;display:flex;flex-direction:column}
+/* tengah bila muat; bila menu lebih panjang dari layar, bagian atas (Dashboard) tetap bisa dicapai — justify-content:center memotongnya */
+.side nav>:first-child{margin-top:auto}.side nav>:last-child{margin-bottom:auto}
+.side nav::-webkit-scrollbar{width:6px}.side nav::-webkit-scrollbar-thumb{background:#ffffff33;border-radius:3px}
 .side__grup{font-size:10.5px;letter-spacing:.9px;text-transform:uppercase;color:#7f9bcb;padding:10px 10px 4px}
 .side nav a{padding:7px 12px;border-radius:9px;display:flex;gap:11px;align-items:center;font-size:13.5px;transition:background .15s}
 .side nav a i{font-size:16px;width:18px;text-align:center;opacity:.9}

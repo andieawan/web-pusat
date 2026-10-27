@@ -39,10 +39,10 @@
     $user = auth()->user();
 @endphp
 <aside class="side" id="menu-samping">
-    <div class="side__brand">
+    <a class="side__brand" href="{{ route('admin.dashboard') }}" title="Dashboard">
         <img class="side__logo" src="{{ \App\Models\Pengaturan::logoUrl() }}" alt="" width="40" height="40" data-sembunyi-galat>
         <div class="side__nama">SMKS IBU<small>Panel Admin</small></div>
-    </div>
+    </a>
     <nav aria-label="Menu admin">
         @foreach ($menu as $grup => $butir)
             <div class="side__grup">{{ $grup }}</div>
