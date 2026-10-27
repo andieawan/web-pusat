@@ -42,7 +42,7 @@ class WebsiteTest extends TestCase
             ->assertSee('BUSTANUL ULUM')
             ->assertSee('Berita Terbaru')
             ->assertSee('Program Keahlian')
-            ->assertSee('images/hero.jpg'); // cadangan saat belum ada banner
+            ->assertDontSee('images/hero.jpg'); // belum ada banner ->assertSee('images/hero.jpg'); // cadangan saat belum ada banner tidak ada berkas bawaan: latar gradien, tanpa gambar 404
     }
 
     public function test_banner_aktif_tampil_dan_nonaktif_tidak(): void
