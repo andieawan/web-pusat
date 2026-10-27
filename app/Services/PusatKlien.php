@@ -67,6 +67,7 @@ class PusatKlien
         if (is_array($data)) {
             Cache::put($segar, $data, config('pusat.cache_detik'));
             Cache::put($basi, $data, now()->addDays(7));
+            Cache::put('pusat.sinkron_terakhir', now('UTC')->format('Y-m-d H:i:s'), now()->addDays(30));
 
             return $data;
         }
@@ -75,5 +76,16 @@ class PusatKlien
         Cache::put($segar, $lama, 30);
 
         return $lama;
+    }
+
+    /** Buang salinan sementara lalu ambil ulang ringkasan & jurusan dari Pusat (tombol "Sinkron sekarang"). */
+    public static function segarkan(): bool
+    {
+        foreach (['ringkasan', 'jurusan'] as $n) {
+            Cache::forget("pusat.$n");
+        }
+        $ok = self::ringkasan() !== null && self::jurusan() !== null;
+
+        return $ok && Cache::get('pusat.sinkron_terakhir') !== null;
     }
 }

@@ -209,4 +209,18 @@ class PusatTest extends TestCase
         config(['pusat.enabled' => false]);
         $this->webhook('ping', [])->assertNotFound();
     }
+
+    public function test_halaman_integrasi_pusat_sama_dengan_aplikasi_lain(): void
+    {
+        Http::fake([
+            'pusat.test/api/v1/ringkasan' => Http::response(['data' => ['tahun_ajaran' => '2026/2027', 'jumlah_siswa_aktif' => 72, 'jumlah_guru' => 9, 'jumlah_staf' => 2, 'jumlah_kelas' => 9]]),
+            'pusat.test/api/v1/master/jurusan*' => Http::response(['data' => [['kode' => 'AK', 'nama' => 'Akuntansi'], ['kode' => 'DKV', 'nama' => 'Desain Komunikasi Visual']]]),
+            'pusat.test/api/v1/ping' => Http::response(['data' => ['ok' => true]]),
+        ]);
+        $admin = User::factory()->admin()->create();
+        $this->actingAs($admin)->get('/admin/integrasi')->assertOk()
+            ->assertSee('Redirect URI')->assertSee('URL webhook')->assertSee('2026/2027')->assertSee('72 siswa aktif')->assertSee('Sinkron sekarang');
+        $this->post('/admin/integrasi/uji-pusat')->assertSessionHas('ok');
+        $this->post('/admin/integrasi/sinkron')->assertSessionHas('ok');
+    }
 }

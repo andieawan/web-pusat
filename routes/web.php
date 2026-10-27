@@ -49,6 +49,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'auth.session', 'adm
     Route::put('akun/password', [Admin\AkunController::class, 'password'])->middleware('throttle:6,1')->name('akun.password');
     Route::resource('pengguna', Admin\PenggunaController::class)->except('show');
 
+    Route::get('integrasi', [Admin\IntegrasiController::class, 'index'])->name('integrasi');
+    Route::post('integrasi/uji-pusat', [Admin\IntegrasiController::class, 'ujiPusat'])->middleware('throttle:10,1')->name('integrasi.pusat');
+    Route::post('integrasi/sinkron', [Admin\IntegrasiController::class, 'sinkron'])->middleware('throttle:5,1')->name('integrasi.sinkron');
+
     Route::get('pengaturan', [Admin\PengaturanController::class, 'edit'])->name('pengaturan');
     Route::put('pengaturan', [Admin\PengaturanController::class, 'update'])->name('pengaturan.update');
 });

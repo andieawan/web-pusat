@@ -31,6 +31,7 @@
         ],
         'Sistem' => [
             ['Pengaturan Situs', 'admin.pengaturan', 'bi-gear-fill', 'admin.pengaturan*'],
+            ['Integrasi Pusat', 'admin.integrasi', 'bi-diagram-3-fill', 'admin.integrasi*'],
             ['Pengguna Admin', 'admin.pengguna.index', 'bi-shield-lock-fill', 'admin.pengguna.*'],
             ['Akun Saya', 'admin.akun', 'bi-person-circle', 'admin.akun*'],
         ],
@@ -68,6 +69,7 @@
         <a href="{{ route('beranda') }}" target="_blank" rel="noopener" class="atas__tautan"><i class="bi bi-box-arrow-up-right"></i><span>Lihat website</span></a>
     </header>
     <main class="isi">
+        @if (session('err'))<div class="notif notif--err" role="alert"><i class="bi bi-exclamation-triangle-fill"></i><div>{{ session('err') }}</div><button type="button" class="notif__tutup" data-tutup aria-label="Tutup">&times;</button></div>@endif
         @if (session('ok'))<div class="notif notif--ok" role="status"><i class="bi bi-check-circle-fill"></i><div>{{ session('ok') }}</div><button type="button" class="notif__tutup" data-tutup aria-label="Tutup">&times;</button></div>@endif
         @yield('content')
     </main>
