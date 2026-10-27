@@ -59,7 +59,7 @@ class HalamanController extends Controller
 
     public function profil()
     {
-        return view('profil', ['staf' => Staf::orderBy('urutan')->orderBy('id')->get()]);
+        return view('profil', ['staf' => Staf::tampil()->orderBy('urutan')->orderBy('id')->get()]);
     }
 
     public function akademik()

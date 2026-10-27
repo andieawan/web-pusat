@@ -27,6 +27,6 @@ class StafController extends CrudController
 
     protected function kolom(): array
     {
-        return ['Nama' => 'nama', 'Jabatan' => 'jabatan', 'Urutan' => 'urutan'];
+        return ['Nama' => 'nama', 'Jabatan' => 'jabatan', 'Urutan' => 'urutan', 'Tampil' => 'aktif'];
     }
 }

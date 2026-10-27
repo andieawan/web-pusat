@@ -48,6 +48,12 @@ class PusatKlien
         return $baris === null ? null : array_values(array_filter($baris, fn ($j) => empty($j['dihapus']) && ($j['aktif'] ?? true)));
     }
 
+    /** Guru & staf (cakupan pegawai_dasar: tanpa HP/email). Salinan baru langsung diterapkan ke halaman Guru & Staf. */
+    public static function pegawai(): ?array
+    {
+        return self::ambil('pegawai', '/api/v1/master/pegawai?per_page=500');
+    }
+
     private static function ambil(string $nama, string $path): ?array
     {
         if (! self::aktif()) {
@@ -68,12 +74,14 @@ class PusatKlien
             if (Cache::add('pusat.sambungan_ditarik', 1, 3600)) {
                 Sambungan::tarikAman(); // Website tidak menerima webhook: ambil sambungan paling lama tiap jam
             }
-            if ($nama === 'jurusan') {
-                try {
-                    JurusanSync::terapkan($data); // jurusan baru di Pusat langsung jadi Program Keahlian
-                } catch (\Throwable $e) {
-                    report($e);
-                }
+            try {
+                match ($nama) {
+                    'jurusan' => JurusanSync::terapkan($data), // jurusan baru di Pusat langsung jadi Program Keahlian
+                    'pegawai' => StafSync::terapkan($data),    // guru & staf baru langsung tampil di halaman Guru & Staf
+                    default => null,
+                };
+            } catch (\Throwable $e) {
+                report($e);
             }
             Cache::put($segar, $data, config('pusat.cache_detik'));
             Cache::put($basi, $data, now()->addDays(7));
@@ -91,10 +99,11 @@ class PusatKlien
     /** Buang salinan sementara lalu ambil ulang ringkasan & jurusan dari Pusat (tombol "Sinkron sekarang"). */
     public static function segarkan(): bool
     {
-        foreach (['ringkasan', 'jurusan'] as $n) {
+        foreach (['ringkasan', 'jurusan', 'pegawai'] as $n) {
             Cache::forget("pusat.$n");
         }
         $ok = self::ringkasan() !== null && self::jurusan() !== null;
+        self::pegawai(); // opsional: butuh izin pegawai_dasar di Pusat
 
         return $ok && Cache::get('pusat.sinkron_terakhir') !== null;
     }

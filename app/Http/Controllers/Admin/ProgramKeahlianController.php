@@ -28,6 +28,6 @@ class ProgramKeahlianController extends CrudController
 
     protected function kolom(): array
     {
-        return ['Program' => 'nama', 'Kode Pusat' => 'kode', 'Ikon' => 'ikon', 'Urutan' => 'urutan'];
+        return ['Program' => 'nama', 'Kode Pusat' => 'kode', 'Ikon' => 'ikon', 'Urutan' => 'urutan', 'Tampil' => 'aktif'];
     }
 }

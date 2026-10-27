@@ -49,6 +49,7 @@ class DashboardController extends Controller
 
         // Jurusan di Pusat yang belum punya halaman Program Keahlian (dicocokkan lewat nama, tanpa membedakan huruf).
         $jurusanBelumAda = [];
+        PusatKlien::pegawai(); // menyalin guru & staf baru dari Pusat (memakai cache; tidak memanggil Pusat tiap kali)
         if ($jurusan = PusatKlien::jurusan()) {
             $ada = ProgramKeahlian::pluck('nama')->map(fn ($n) => mb_strtolower(trim($n)))->all();
             $jurusanBelumAda = collect($jurusan)->pluck('nama')->filter(fn ($n) => ! in_array(mb_strtolower(trim($n)), $ada, true))->values()->all();

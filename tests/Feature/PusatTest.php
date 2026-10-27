@@ -182,6 +182,29 @@ class PusatTest extends TestCase
         $this->assertSame('bi-shop', ProgramKeahlian::where('pusat_uuid', 'j-bd')->value('ikon'));
     }
 
+    public function test_guru_staf_dari_pusat_tampil_dan_jabatan_admin_tidak_tertimpa(): void
+    {
+        \App\Models\Staf::create(['nama' => 'Siti Aminah', 'jabatan' => 'Guru Matematika & Wakasek Kurikulum', 'urutan' => 1]);
+        Http::swap(new \Illuminate\Http\Client\Factory);
+        Http::fake(['pusat.test/api/v1/master/pegawai*' => Http::response(['data' => [
+            ['uuid' => 'p1', 'nip' => '1', 'nama' => 'Siti Aminah', 'jenis' => 'guru', 'jabatan' => null, 'aktif' => true],
+            ['uuid' => 'p2', 'nip' => '2', 'nama' => 'Ahmad Fauzi', 'jenis' => 'staf', 'jabatan' => 'Kepala TU', 'aktif' => true],
+            ['uuid' => 'p3', 'nip' => '3', 'nama' => 'Pensiun', 'jenis' => 'guru', 'aktif' => false],
+        ]]), 'pusat.test/*' => Http::response(['data' => []])]);
+
+        $this->actingAs(User::factory()->admin()->create())->post('/admin/integrasi/sinkron')->assertSessionHas('ok');
+        $this->assertSame(2, \App\Models\Staf::count());
+        $this->assertSame('Guru Matematika & Wakasek Kurikulum', \App\Models\Staf::where('pusat_uuid', 'p1')->value('jabatan'));
+        $this->assertSame('Kepala TU', \App\Models\Staf::where('pusat_uuid', 'p2')->value('jabatan'));
+        $this->get('/profil')->assertOk()->assertSee('Ahmad Fauzi');
+
+        // Jabatan berubah di Pusat → ikut; pegawai dinonaktifkan → disembunyikan
+        $this->webhook('pegawai.diperbarui', ['uuid' => 'p1', 'nama' => 'Siti Aminah', 'jenis' => 'guru', 'jabatan' => 'Kepala Sekolah', 'aktif' => true])->assertOk();
+        $this->assertSame('Kepala Sekolah', \App\Models\Staf::where('pusat_uuid', 'p1')->value('jabatan'));
+        $this->webhook('pegawai.diperbarui', ['uuid' => 'p2', 'nama' => 'Ahmad Fauzi', 'jenis' => 'staf', 'jabatan' => 'Kepala TU', 'aktif' => false])->assertOk();
+        $this->get('/profil')->assertOk()->assertDontSee('Ahmad Fauzi');
+    }
+
     // ---- Webhook ----
 
     private function webhook(string $event, array $data, string $rahasia = 'whsec')
