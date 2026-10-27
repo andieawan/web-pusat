@@ -57,6 +57,7 @@ class IntegrasiController extends Controller
         }
 
         \App\Services\Sambungan::tarikAman();
+        \App\Services\ProfilPusat::tarikAman();
         if (\App\Services\PklKlien::aktif()) {
             \App\Services\PklKlien::mitra(true);
         }

@@ -55,12 +55,22 @@ class PengaturanController extends Controller
         return array_merge(...array_values($this->grup()));
     }
 
+    /** Kunci pengaturan yang mengikuti Profil Sekolah di Pusat (terisi di sana) — tidak diubah di sini. @return string[] */
+    private function dariPusat(): array
+    {
+        $peta = ['alamat' => 'alamat', 'telepon' => 'telepon', 'email' => 'email', 'profil_kepsek' => 'kepsek', 'profil_npsn' => 'npsn'];
+
+        return array_keys(array_filter($peta, fn ($sumber) => \App\Services\ProfilPusat::nilai($sumber) !== null));
+    }
+
     public function edit()
     {
         $grup = $this->grup();
         $nilai = Pengaturan::pluck('nilai', 'kunci')->all();
+        $dariPusat = $this->dariPusat();
+        $logoPusat = \App\Services\ProfilPusat::adaLogo();
 
-        return view('admin.pengaturan', compact('grup', 'nilai'));
+        return view('admin.pengaturan', compact('grup', 'nilai', 'dariPusat', 'logoPusat'));
     }
 
     public function update(Request $request)
@@ -70,11 +80,13 @@ class PengaturanController extends Controller
             'foto_kepsek' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:8192',
         ]);
 
-        foreach (array_keys($this->daftar()) as $kunci) {
+        foreach (array_diff(array_keys($this->daftar()), $this->dariPusat()) as $kunci) {
             Pengaturan::simpan($kunci, $request->input($kunci));
         }
 
-        $this->simpanGambar($request, 'logo', 'logo', 'hapus_logo', null);
+        if (! \App\Services\ProfilPusat::adaLogo()) {
+            $this->simpanGambar($request, 'logo', 'logo', 'hapus_logo', null); // logo dari Pusat tidak diganti di sini
+        }
         $this->simpanGambar($request, 'foto_kepsek', 'profil_foto_kepsek', 'hapus_foto_kepsek', 800);
 
         return back()->with('ok', 'Pengaturan situs disimpan.');

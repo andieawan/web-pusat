@@ -72,7 +72,8 @@ class PusatKlien
         }
         if (is_array($data)) {
             if (Cache::add('pusat.sambungan_ditarik', 1, 3600)) {
-                Sambungan::tarikAman(); // Website tidak menerima webhook: ambil sambungan paling lama tiap jam
+                Sambungan::tarikAman(); // cadangan bila webhook terlewat: paling lama tiap jam
+                ProfilPusat::tarikAman();
             }
             try {
                 match ($nama) {

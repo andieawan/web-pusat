@@ -96,6 +96,8 @@ class PusatController extends Controller
         } elseif (str_starts_with($event, 'pegawai.')) {
             \App\Services\StafSync::satu($data);
             \Illuminate\Support\Facades\Cache::forget('pusat.pegawai');
+        } elseif ($event === 'profil.diperbarui') {
+            \App\Services\ProfilPusat::tarik();
         } elseif ($event === 'sambungan.diperbarui') {
             \App\Services\Sambungan::tarik();
         }

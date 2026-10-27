@@ -11,12 +11,16 @@
     @csrf @method('PUT')
     <div class="form__badan">
     <h2 class="form__grup" id="logo">Logo Sekolah</h2>
+    @if ($logoPusat)
+    <p class="sub">Logo mengikuti <b>Profil Sekolah di Pusat</b>. @if (! empty($nilai['logo']))<img src="{{ Storage::disk('public')->url($nilai['logo']) }}" class="pratinjau" alt="Logo saat ini">@endif</p>
+    @else
     <label>Unggah logo (PNG/JPG/WebP, maks. 2 MB; latar transparan lebih bagus)
         @if (! empty($nilai['logo']))<img src="{{ Storage::disk('public')->url($nilai['logo']) }}" class="pratinjau" alt="Logo saat ini">@endif
         <input type="file" name="logo" accept="image/png,image/jpeg,image/webp">
     </label>
     @if (! empty($nilai['logo']))
         <label class="cek"><input type="checkbox" name="hapus_logo" value="1"> Hapus logo ini (kembali ke bawaan)</label>
+    @endif
     @endif
 
     <h2 class="form__grup" id="foto-kepsek">Foto Kepala Sekolah (tampil di halaman Profil)</h2>
@@ -31,8 +35,10 @@
     @foreach ($grup as $namaGrup => $daftar)
         <h2 class="form__grup">{{ $namaGrup }}</h2>
         @foreach ($daftar as $kunci => [$label, $tipe])
-            <label>{{ $label }}
-                @if ($tipe === 'textarea')
+            <label>{{ $label }}@if (in_array($kunci, $dariPusat, true)) <small class="sub">(dari Profil Sekolah di Pusat)</small>@endif
+                @if (in_array($kunci, $dariPusat, true))
+                    <input type="text" value="{{ $nilai[$kunci] ?? '' }}" readonly>
+                @elseif ($tipe === 'textarea')
                     <textarea name="{{ $kunci }}" rows="5">{{ old($kunci, $nilai[$kunci] ?? '') }}</textarea>
                 @else
                     <input type="text" name="{{ $kunci }}" value="{{ old($kunci, $nilai[$kunci] ?? '') }}">
