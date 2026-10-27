@@ -3,7 +3,8 @@
 @section('content')
 
 {{-- Hero --}}
-@php $daftarSlide = count($slides) ? $slides : [asset('images/hero.jpg')]; @endphp
+{{-- Bawaan bila admin belum mengunggah slide: public/images/hero.jpg bila ada, selain itu latar gradien saja (tanpa permintaan 404). --}}
+@php $daftarSlide = count($slides) ? $slides : (is_file(public_path('images/hero.jpg')) ? [asset('images/hero.jpg')] : []); @endphp
 <section class="hero" data-slider>
     @foreach ($daftarSlide as $i => $src)
         <div class="hero__bg {{ $i === 0 ? 'on' : '' }}" style="background-image:url('{{ $src }}')"></div>
@@ -78,7 +79,7 @@
 {{-- Tentang + Program Keahlian --}}
 <section class="container dua-kolom dua-kolom--tentang">
     <div class="tentang">
-        <div class="tentang__gambar" style="background-image:url('{{ asset('images/gedung.jpg') }}')"></div>
+        <div class="tentang__gambar" @if(is_file(public_path('images/gedung.jpg'))) style="background-image:url('{{ asset('images/gedung.jpg') }}')" @endif></div>
         <div>
             <small class="tentang__label">Tentang Kami</small>
             <h2>SMK Islam Bustanul Ulum<br>Pakusari Jember</h2>

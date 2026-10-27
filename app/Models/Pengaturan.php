@@ -20,7 +20,7 @@ class Pengaturan extends Model
         return static::$cache[$kunci] ?? $default;
     }
 
-    /** Logo sekolah: unggahan admin, atau berkas bawaan public/images/logo.png. */
+    /** Logo sekolah: unggahan admin, atau berkas bawaan public/images/logo.png (logo sekolah, ikut di repo). */
     public static function logoUrl(): string
     {
         $logo = static::ambil('logo');
