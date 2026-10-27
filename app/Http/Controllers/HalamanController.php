@@ -68,6 +68,7 @@ class HalamanController extends Controller
             'program' => ProgramKeahlian::orderBy('urutan')->get(),
             'agenda' => Agenda::where('tanggal', '>=', now()->toDateString())->orderBy('tanggal')->take(5)->get(),
             'pengumuman' => Pengumuman::where('kategori', 'Akademik')->orderByDesc('tanggal')->take(5)->get(),
+            'mitraPkl' => \App\Services\PklKlien::mitra(),
         ]);
     }
 

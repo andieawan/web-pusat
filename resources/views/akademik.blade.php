@@ -9,7 +9,8 @@
 
     $menu = ['program' => 'Program Keahlian'];
     if ($kurikulum || $jam) $menu['kurikulum'] = 'Kurikulum & Jam Belajar';
-    if ($pkl) $menu['pkl'] = 'PKL & Industri';
+    $mitra = collect($mitraPkl['mitra'] ?? []);
+    if ($pkl || $mitra->isNotEmpty()) $menu['pkl'] = 'PKL & Industri';
     if ($agenda->isNotEmpty() || $pengumuman->isNotEmpty()) $menu['kegiatan'] = 'Agenda & Pengumuman';
 @endphp
 @include('partials.kepala-halaman', ['judul' => 'Akademik', 'sub' => 'Program keahlian, kurikulum, dan kegiatan belajar', 'ikon' => 'bi-mortarboard-fill', 'menu' => $menu])
@@ -47,10 +48,26 @@
         </section>
     @endif
 
-    @if ($pkl)
+    @if ($pkl || $mitra->isNotEmpty())
         <section class="blok" id="pkl">
             <div class="judul-blok"><span class="judul-blok__ikon"><i class="bi bi-briefcase-fill"></i></span><h2>Praktik Kerja Lapangan &amp; Kerja Sama Industri</h2></div>
-            <div class="kartu-polos teks"><p>{!! nl2br(e($pkl)) !!}</p></div>
+            @if ($pkl)<div class="kartu-polos teks"><p>{!! nl2br(e($pkl)) !!}</p></div>@endif
+            @if ($mitra->isNotEmpty())
+                <div class="kartu-polos" style="margin-top:16px">
+                    <h3 style="margin-bottom:6px">Mitra Industri (DUDI)</h3>
+                    <p class="sub" style="margin-bottom:14px">{{ $mitra->count() }} dunia usaha/industri menjadi tempat PKL siswa{{ ! empty($mitraPkl['periode_aktif']) && ($mitraPkl['total_siswa_periode_ini'] ?? 0) > 0 ? ' · '.$mitraPkl['total_siswa_periode_ini'].' siswa PKL pada '.$mitraPkl['periode_aktif'] : '' }}.</p>
+                    <div class="program">
+                        @foreach ($mitra as $m)
+                            <div class="program__kartu">
+                                <span class="program__ikon"><i class="bi bi-building"></i></span>
+                                <h3>{{ $m['nama'] }}</h3>
+                                @if ($m['bidang'])<p>{{ $m['bidang'] }}</p>@endif
+                                @if ($m['siswa_periode_ini'] > 0)<small class="sub">{{ $m['siswa_periode_ini'] }} siswa PKL periode ini</small>@endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </section>
     @endif
 

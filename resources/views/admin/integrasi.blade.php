@@ -36,6 +36,19 @@
     @endif
 </div>
 
+<div class="kartu" style="margin-top:18px">
+    <div class="kartu__kepala"><h2>Aplikasi PKL (mitra industri)</h2>
+        @if ($p['pklUrl'])<span class="pil pil--ya">Tersambung</span>@else<span class="pil pil--tidak">Belum diatur</span>@endif
+    </div>
+    <div class="tabel-bungkus" style="box-shadow:none;border:0;border-radius:0">
+    <table class="tabel">
+        <tr><td style="width:200px;color:var(--abu)">Alamat PKL</td><td>{{ $p['pklUrl'] ?: '- (isi PKL_URL di .env)' }}</td></tr>
+        <tr><td style="color:var(--abu)">Ditampilkan</td><td>Halaman Akademik → "Mitra Industri (DUDI)": nama & bidang DUDI dan jumlah siswa PKL. Tanpa data siswa.</td></tr>
+        <tr><td style="color:var(--abu)">Data terakhir</td><td>{{ $p['mitra'] ? count($p['mitra']['mitra'] ?? []).' mitra' : '-' }}{{ $p['mitraWaktu'] ? ' · diambil '.\Carbon\CarbonImmutable::parse($p['mitraWaktu'], 'UTC')->setTimezone('Asia/Jakarta')->format('d-m-Y H:i') : '' }}</td></tr>
+    </table>
+    </div>
+</div>
+
 @if ($p['jurusanBelumAda'])
 <div class="notif" style="margin-top:18px;background:var(--biru-bg);border-color:var(--garis)"><i class="bi bi-info-circle-fill"></i><div>Jurusan di Pusat yang belum punya halaman Program Keahlian: <b>{{ implode(', ', $p['jurusanBelumAda']) }}</b>. <a href="{{ route('admin.program.create') }}">Tambahkan</a>.</div></div>
 @endif

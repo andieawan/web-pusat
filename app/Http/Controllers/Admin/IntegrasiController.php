@@ -26,6 +26,8 @@ class IntegrasiController extends Controller
                 'siswa aktif' => (int) ($r['jumlah_siswa_aktif'] ?? 0), 'guru' => (int) ($r['jumlah_guru'] ?? 0),
                 'staf' => (int) ($r['jumlah_staf'] ?? 0), 'kelas' => (int) ($r['jumlah_kelas'] ?? 0), 'jurusan' => count($jurusan ?? []),
             ],
+            'pklUrl' => config('pkl.url'), 'mitra' => \App\Services\PklKlien::aktif() ? \App\Services\PklKlien::mitra() : null,
+            'mitraWaktu' => Cache::get('pkl.mitra.waktu'),
             'jurusanBelumAda' => $jurusan === null ? [] : collect($jurusan)->pluck('nama')
                 ->reject(fn ($n) => ProgramKeahlian::whereRaw('LOWER(nama) = ?', [mb_strtolower(trim($n))])->exists())->values()->all(),
         ]]);
@@ -52,6 +54,10 @@ class IntegrasiController extends Controller
     {
         if (! PusatKlien::aktif()) {
             return back()->with('err', 'Integrasi Pusat belum aktif (isi PUSAT_* di .env).');
+        }
+
+        if (\App\Services\PklKlien::aktif()) {
+            \App\Services\PklKlien::mitra(true);
         }
 
         return PusatKlien::segarkan()

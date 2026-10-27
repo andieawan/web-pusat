@@ -50,6 +50,16 @@
                 <a href="{{ route($rute) }}" class="{{ request()->routeIs($pola) ? 'on' : '' }}" @if (request()->routeIs($pola)) aria-current="page" @endif><i class="bi {{ $ikon }}"></i> {{ $nama }}</a>
             @endforeach
         @endforeach
+        @php
+            $pusatUrl = rtrim((string) config('pusat.url'), '/');
+            $lain = $pusatUrl === '' ? [] : array_values(array_filter((array) session('aplikasi_lain', []),
+                fn ($a) => is_array($a) && isset($a['nama'], $a['url']) && str_starts_with((string) $a['url'], $pusatUrl.'/')));
+        @endphp
+        @if ($lain || $pusatUrl !== '')
+            <div class="side__grup">Aplikasi lain</div>
+            @foreach ($lain as $a)<a href="{{ $a['url'] }}"><i class="bi bi-box-arrow-up-right"></i> {{ $a['nama'] }}</a>@endforeach
+            @if ($pusatUrl !== '')<a href="{{ $pusatUrl }}/portal"><i class="bi bi-grid-3x3-gap-fill"></i> Pusat Sekolah</a>@endif
+        @endif
     </nav>
     <div class="side__bawah">
         <div class="side__user">
