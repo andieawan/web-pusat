@@ -42,7 +42,7 @@
     </div>
     <div class="tabel-bungkus" style="box-shadow:none;border:0;border-radius:0">
     <table class="tabel">
-        <tr><td style="width:200px;color:var(--abu)">Alamat PKL</td><td>{{ $p['pklUrl'] ?: '- (isi PKL_URL di .env)' }}</td></tr>
+        <tr><td style="width:200px;color:var(--abu)">Alamat PKL</td><td>{{ $p['pklUrl'] ?: '- (sambungkan "PKL → Website" di Pusat → Administrasi → Sambungan)' }}</td></tr>
         <tr><td style="color:var(--abu)">Ditampilkan</td><td>Halaman Akademik → "Mitra Industri (DUDI)": nama & bidang DUDI dan jumlah siswa PKL. Tanpa data siswa.</td></tr>
         <tr><td style="color:var(--abu)">Data terakhir</td><td>{{ $p['mitra'] ? count($p['mitra']['mitra'] ?? []).' mitra' : '-' }}{{ $p['mitraWaktu'] ? ' · diambil '.\Carbon\CarbonImmutable::parse($p['mitraWaktu'], 'UTC')->setTimezone('Asia/Jakarta')->format('d-m-Y H:i') : '' }}</td></tr>
     </table>

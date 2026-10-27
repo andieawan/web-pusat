@@ -65,6 +65,9 @@ class PusatKlien
             $data = null;
         }
         if (is_array($data)) {
+            if (Cache::add('pusat.sambungan_ditarik', 1, 3600)) {
+                Sambungan::tarikAman(); // Website tidak menerima webhook: ambil sambungan paling lama tiap jam
+            }
             Cache::put($segar, $data, config('pusat.cache_detik'));
             Cache::put($basi, $data, now()->addDays(7));
             Cache::put('pusat.sinkron_terakhir', now('UTC')->format('Y-m-d H:i:s'), now()->addDays(30));

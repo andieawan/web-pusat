@@ -56,6 +56,7 @@ class IntegrasiController extends Controller
             return back()->with('err', 'Integrasi Pusat belum aktif (isi PUSAT_* di .env).');
         }
 
+        \App\Services\Sambungan::tarikAman();
         if (\App\Services\PklKlien::aktif()) {
             \App\Services\PklKlien::mitra(true);
         }

@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AllowDynamicProperties' => $vendorDir . '/symfony/polyfill-php82/Resources/stubs/AllowDynamicProperties.php',
+    'App\\Console\\Commands\\Periksa' => $baseDir . '/app/Console/Commands/Periksa.php',
     'App\\Http\\Controllers\\Admin\\AgendaController' => $baseDir . '/app/Http/Controllers/Admin/AgendaController.php',
     'App\\Http\\Controllers\\Admin\\AkunController' => $baseDir . '/app/Http/Controllers/Admin/AkunController.php',
     'App\\Http\\Controllers\\Admin\\AuthController' => $baseDir . '/app/Http/Controllers/Admin/AuthController.php',
@@ -15,6 +16,7 @@ return array(
     'App\\Http\\Controllers\\Admin\\DashboardController' => $baseDir . '/app/Http/Controllers/Admin/DashboardController.php',
     'App\\Http\\Controllers\\Admin\\EkstrakurikulerController' => $baseDir . '/app/Http/Controllers/Admin/EkstrakurikulerController.php',
     'App\\Http\\Controllers\\Admin\\GaleriController' => $baseDir . '/app/Http/Controllers/Admin/GaleriController.php',
+    'App\\Http\\Controllers\\Admin\\IntegrasiController' => $baseDir . '/app/Http/Controllers/Admin/IntegrasiController.php',
     'App\\Http\\Controllers\\Admin\\PengaturanController' => $baseDir . '/app/Http/Controllers/Admin/PengaturanController.php',
     'App\\Http\\Controllers\\Admin\\PenggunaController' => $baseDir . '/app/Http/Controllers/Admin/PenggunaController.php',
     'App\\Http\\Controllers\\Admin\\PengumumanController' => $baseDir . '/app/Http/Controllers/Admin/PengumumanController.php',
@@ -38,8 +40,10 @@ return array(
     'App\\Models\\Staf' => $baseDir . '/app/Models/Staf.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
+    'App\\Services\\PklKlien' => $baseDir . '/app/Services/PklKlien.php',
     'App\\Services\\PusatAkun' => $baseDir . '/app/Services/PusatAkun.php',
     'App\\Services\\PusatKlien' => $baseDir . '/app/Services/PusatKlien.php',
+    'App\\Services\\Sambungan' => $baseDir . '/app/Services/Sambungan.php',
     'App\\Support\\Aset' => $baseDir . '/app/Support/Aset.php',
     'App\\Support\\GambarUpload' => $baseDir . '/app/Support/GambarUpload.php',
     'App\\Support\\PusatTanda' => $baseDir . '/app/Support/PusatTanda.php',
