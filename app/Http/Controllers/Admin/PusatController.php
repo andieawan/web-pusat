@@ -86,8 +86,15 @@ class PusatController extends Controller
         if (! PusatTanda::verifikasi((string) config('pusat.webhook_secret'), $waktu, $request->getContent(), (string) $request->header('X-Pusat-Signature'))) {
             return response()->json(['ok' => false, 'error' => 'tanda_tangan_salah'], 401);
         }
-        if (in_array($request->header('X-Pusat-Event'), ['akun.diperbarui', 'akses.diperbarui'], true)) {
-            PusatAkun::cabutBilaPerlu((array) $request->json('data', []));
+        $event = (string) $request->header('X-Pusat-Event');
+        $data = (array) $request->json('data', []);
+        if (in_array($event, ['akun.diperbarui', 'akses.diperbarui'], true)) {
+            PusatAkun::cabutBilaPerlu($data);
+        } elseif (str_starts_with($event, 'jurusan.')) {
+            \App\Services\JurusanSync::satu($data);
+            \Illuminate\Support\Facades\Cache::forget('pusat.jurusan');
+        } elseif ($event === 'sambungan.diperbarui') {
+            \App\Services\Sambungan::tarik();
         }
 
         return response()->json(['ok' => true]);

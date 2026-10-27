@@ -65,7 +65,7 @@ class HalamanController extends Controller
     public function akademik()
     {
         return view('akademik', [
-            'program' => ProgramKeahlian::orderBy('urutan')->get(),
+            'program' => ProgramKeahlian::tampil()->orderBy('urutan')->get(),
             'agenda' => Agenda::where('tanggal', '>=', now()->toDateString())->orderBy('tanggal')->take(5)->get(),
             'pengumuman' => Pengumuman::where('kategori', 'Akademik')->orderByDesc('tanggal')->take(5)->get(),
             'mitraPkl' => \App\Services\PklKlien::mitra(),

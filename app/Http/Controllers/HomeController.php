@@ -30,7 +30,7 @@ class HomeController extends Controller
                 ['ikon' => 'bi-mortarboard-fill', 'judul' => 'Siswa Aktif', 'nilai' => $statSiswa, 'ket' => 'Peserta didik'],
                 ['ikon' => 'bi-people-fill', 'judul' => 'Guru & Staff', 'nilai' => $statGuru, 'ket' => 'Pendidik dan tenaga kependidikan'],
                 ['ikon' => 'bi-trophy-fill', 'judul' => 'Prestasi', 'nilai' => Pengaturan::ambil('stat_prestasi', '0'), 'ket' => 'Penghargaan tingkat kabupaten hingga nasional'],
-                ['ikon' => 'bi-book-half', 'judul' => 'Program Keahlian', 'nilai' => (string) ProgramKeahlian::count(), 'ket' => 'Kompetensi keahlian unggulan'],
+                ['ikon' => 'bi-book-half', 'judul' => 'Program Keahlian', 'nilai' => (string) ProgramKeahlian::tampil()->count(), 'ket' => 'Kompetensi keahlian unggulan'],
             ],
             'berita' => Berita::where('terbit', true)->orderByDesc('tanggal')->take(3)->get()->map(fn ($b) => [
                 'tanggal' => $b->tanggal->translatedFormat('d M Y'),
@@ -45,7 +45,7 @@ class HomeController extends Controller
                 'tgl' => $p->tanggal->format('d'), 'bln' => $p->tanggal->translatedFormat('M'),
                 'judul' => $p->judul, 'kategori' => $p->kategori,
             ])->all(),
-            'program' => ProgramKeahlian::orderBy('urutan')->get()->map(fn ($p) => [
+            'program' => ProgramKeahlian::tampil()->orderBy('urutan')->get()->map(fn ($p) => [
                 'ikon' => $p->ikon, 'nama' => $p->nama,
             ])->all(),
             'galeri' => Galeri::orderByDesc('tanggal')->take(4)->get()->map(fn ($g) => [

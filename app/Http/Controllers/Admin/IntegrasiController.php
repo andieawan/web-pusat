@@ -61,8 +61,13 @@ class IntegrasiController extends Controller
             \App\Services\PklKlien::mitra(true);
         }
 
+        if (! \App\Services\JurusanSync::siap()) {
+            return back()->with('err', 'Database website belum diperbarui. Jalankan: sudo bash deploy/update.sh');
+        }
+        $sebelum = \App\Models\ProgramKeahlian::count();
         return PusatKlien::segarkan()
-            ? back()->with('ok', 'Data dari Pusat diperbarui (ringkasan sekolah & jurusan).')
+            ? back()->with('ok', 'Data dari Pusat diperbarui (ringkasan sekolah & jurusan).'
+                .(($baru = \App\Models\ProgramKeahlian::count() - $sebelum) > 0 ? " $baru jurusan baru ditambahkan ke Program Keahlian — lengkapi ikon & deskripsinya." : ''))
             : back()->with('err', 'Pusat tidak dapat dihubungi; website tetap memakai data terakhir yang tersimpan.');
     }
 }

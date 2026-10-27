@@ -154,16 +154,32 @@ class PusatTest extends TestCase
         Http::assertNothingSent();
     }
 
-    public function test_dasbor_menampilkan_jurusan_pusat_yang_belum_ada_di_website(): void
+    public function test_jurusan_pusat_otomatis_menjadi_program_keahlian(): void
     {
-        ProgramKeahlian::create(['nama' => 'Desain Komunikasi Visual', 'ikon' => 'bi-brush', 'urutan' => 1]);
+        ProgramKeahlian::create(['nama' => 'Desain Komunikasi Visual', 'ikon' => 'bi-brush', 'deskripsi' => 'Buatan admin', 'urutan' => 1]);
         Http::swap(new \Illuminate\Http\Client\Factory);
         Http::fake(['pusat.test/api/v1/master/jurusan*' => Http::response(['data' => [
-            ['kode' => 'DKV', 'nama' => 'desain komunikasi visual', 'aktif' => true],
-            ['kode' => 'AK', 'nama' => 'Akuntansi', 'aktif' => true],
-        ]])]);
+            ['uuid' => 'j-dkv', 'kode' => 'DKV', 'nama' => 'desain komunikasi visual', 'aktif' => true],
+            ['uuid' => 'j-ak', 'kode' => 'AK', 'nama' => 'Akuntansi dan Keuangan Lembaga', 'aktif' => true],
+            ['uuid' => 'j-lama', 'kode' => 'X', 'nama' => 'Jurusan Lama', 'aktif' => false],
+        ]]), 'pusat.test/*' => Http::response(['data' => []])]);
 
-        $this->actingAs(User::factory()->admin()->create())->get('/admin')->assertOk()->assertSee('Akuntansi')->assertDontSee('Belum ada Program Keahlian dengan nama: <b>desain');
+        $admin = User::factory()->admin()->create();
+        $this->actingAs($admin)->post('/admin/integrasi/sinkron')->assertSessionHas('ok');
+        $this->assertSame(2, ProgramKeahlian::count());
+        $dkv = ProgramKeahlian::where('pusat_uuid', 'j-dkv')->first();
+        $this->assertSame('Buatan admin', $dkv->deskripsi); // isi buatan admin tidak ditimpa
+        $this->assertSame('bi-brush', $dkv->ikon);
+        $this->assertSame('bi-calculator', ProgramKeahlian::where('kode', 'AK')->value('ikon'));
+        $this->actingAs($admin)->get('/admin')->assertOk()->assertDontSee('Jurusan di Pusat belum ada di website');
+        $this->get('/akademik')->assertOk()->assertSee('Akuntansi dan Keuangan Lembaga');
+
+        // Dinonaktifkan di Pusat (webhook) → disembunyikan dari website publik
+        $this->webhook('jurusan.diperbarui', ['uuid' => 'j-ak', 'kode' => 'AK', 'nama' => 'Akuntansi dan Keuangan Lembaga', 'aktif' => false])->assertOk();
+        $this->assertFalse(ProgramKeahlian::where('pusat_uuid', 'j-ak')->value('aktif'));
+        $this->get('/akademik')->assertOk()->assertDontSee('Akuntansi dan Keuangan Lembaga');
+        $this->webhook('jurusan.dibuat', ['uuid' => 'j-bd', 'kode' => 'BD', 'nama' => 'Bisnis Digital', 'aktif' => true])->assertOk();
+        $this->assertSame('bi-shop', ProgramKeahlian::where('pusat_uuid', 'j-bd')->value('ikon'));
     }
 
     // ---- Webhook ----
