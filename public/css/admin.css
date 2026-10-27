@@ -130,7 +130,8 @@ body.admin{display:flex;min-height:100vh}
 .salam .tombol:hover{background:#eaf2ff;box-shadow:none}
 .salam .tombol--garis{background:transparent;color:#fff;border-color:#ffffff80}
 .salam .tombol--garis:hover{background:#ffffff1f}
-.ringkas{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:22px}
+.ringkas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:22px} /* 8 kartu = 2 baris rapi */
+@media(max-width:1100px){.ringkas{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .ringkas__kartu{background:#fff;border-radius:var(--radius);padding:16px 18px;display:flex;gap:14px;align-items:center;box-shadow:var(--bayang);border:1px solid var(--garis);transition:transform .15s,box-shadow .15s}
 .ringkas__kartu:hover{transform:translateY(-2px);box-shadow:var(--bayang-besar)}
 .ringkas__ikon{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:21px;flex:none;background:var(--biru-bg);color:var(--biru)}

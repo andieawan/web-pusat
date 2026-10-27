@@ -94,6 +94,7 @@ img{max-width:100%}
 /* Tentang */
 .dua-kolom--tentang{grid-template-columns:1fr 1fr;gap:34px}
 .tentang{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:center}
+.tentang--tanpa-gambar{grid-template-columns:1fr}
 .tentang__gambar{height:200px;border-radius:10px;background:#c9d8ee center/cover}
 .tentang__label{color:#1f9d55;font-weight:600;font-size:12px}
 .tentang h2{font-size:19px;color:var(--biru-tua);line-height:1.25;margin:2px 0 8px}

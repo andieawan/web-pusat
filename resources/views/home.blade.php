@@ -25,7 +25,7 @@
 
 {{-- Statistik --}}
 <section class="container statistik">
-    @foreach ($statistik as $s)
+    @foreach (array_filter($statistik, fn ($s) => trim((string) $s['nilai']) !== '' && trim((string) $s['nilai']) !== '0') as $s)
         <div class="stat">
             <div class="stat__ikon"><i class="bi {{ $s['ikon'] }}"></i></div>
             <div>
@@ -37,8 +37,10 @@
     @endforeach
 </section>
 
-{{-- Berita + Pengumuman --}}
-<section class="container dua-kolom">
+{{-- Berita + Pengumuman (bagian yang belum ada isinya tidak ditampilkan) --}}
+@if ($berita || $pengumuman)
+<section @class(['container', 'dua-kolom' => $berita && $pengumuman])>
+    @if ($berita)
     <div>
         <div class="judul-seksi">
             <h2>Berita Terbaru</h2>
@@ -61,7 +63,9 @@
             @endforeach
         </div>
     </div>
+    @endif
 
+    @if ($pengumuman)
     <aside class="panel pengumuman">
         <div class="judul-seksi">
             <h2><i class="bi bi-megaphone-fill"></i> Pengumuman</h2>
@@ -74,12 +78,15 @@
             </div>
         @endforeach
     </aside>
+    @endif
 </section>
+@endif
 
 {{-- Tentang + Program Keahlian --}}
 <section class="container dua-kolom dua-kolom--tentang">
-    <div class="tentang">
-        <div class="tentang__gambar" @if(is_file(public_path('images/gedung.jpg'))) style="background-image:url('{{ asset('images/gedung.jpg') }}')" @endif></div>
+    @php($fotoGedung = is_file(public_path('images/gedung.jpg')))
+    <div @class(['tentang', 'tentang--tanpa-gambar' => ! $fotoGedung])>
+        @if ($fotoGedung)<div class="tentang__gambar" style="background-image:url('{{ asset('images/gedung.jpg') }}')"></div>@endif
         <div>
             <small class="tentang__label">Tentang Kami</small>
             <h2>SMK Islam Bustanul Ulum<br>Pakusari Jember</h2>
@@ -90,7 +97,7 @@
 
     <div class="keahlian">
         <div class="judul-seksi">
-            <h2 class="h2-kecil"><i class="bi bi-megaphone-fill"></i> Program Keahlian</h2>
+            <h2 class="h2-kecil"><i class="bi bi-mortarboard-fill"></i> Program Keahlian</h2>
             <a href="{{ route('akademik') }}" class="lihat">Lihat Semua <i class="bi bi-arrow-right"></i></a>
         </div>
         <div class="keahlian__grid">
@@ -119,8 +126,10 @@
     </div>
 </section>
 
-{{-- Galeri + Agenda --}}
-<section class="container dua-kolom dua-kolom--galeri">
+{{-- Galeri + Agenda (disembunyikan bila belum ada isinya) --}}
+@if ($galeri || $agenda)
+<section @class(['container', 'dua-kolom dua-kolom--galeri' => $galeri && $agenda])>
+    @if ($galeri)
     <div>
         <div class="judul-seksi">
             <h2 class="h2-kecil"><i class="bi bi-camera-fill"></i> Galeri Kegiatan</h2>
@@ -135,7 +144,9 @@
             @endforeach
         </div>
     </div>
+    @endif
 
+    @if ($agenda)
     <aside>
         <div class="judul-seksi">
             <h2 class="h2-kecil"><i class="bi bi-calendar-week-fill"></i> Agenda Sekolah</h2>
@@ -148,7 +159,9 @@
             </div>
         @endforeach
     </aside>
+    @endif
 </section>
+@endif
 
 <script>
 (function () {

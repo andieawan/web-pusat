@@ -100,12 +100,14 @@
                 <li><i class="bi bi-envelope-fill"></i> {{ \App\Models\Pengaturan::ambil('email', 'smksibp@gmail.com') }}</li>
             </ul>
         </div>
+        @if (collect(['facebook', 'instagram', 'youtube'])->contains(fn ($k) => \App\Models\Pengaturan::ambil('sosmed_'.$k)))
         <div>
             <h4>Ikuti Kami</h4>
             <div class="footer__sosmed">
                 @include('partials.sosmed')
             </div>
         </div>
+        @endif
         <a href="{{ route('ppdb') }}" class="footer__ppdb">
             <i class="bi bi-laptop"></i>
             <span><strong>PPDB Online</strong><small>Daftar sekarang untuk masa depanmu</small></span>
