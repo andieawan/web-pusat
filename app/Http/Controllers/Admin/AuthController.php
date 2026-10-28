@@ -22,7 +22,12 @@ class AuthController extends Controller
 
         // Hanya akun admin yang boleh masuk lewat form ini.
         if (! Auth::attempt($kredensial + ['is_admin' => true], $request->boolean('ingat'))) {
-            return back()->withErrors(['email' => 'Email atau password salah.'])->onlyInput('email');
+            // Login cadangan: akun dari Pusat memakai password Pusat (salinan hash), berguna saat Pusat tidak bisa dihubungi.
+            $u = \App\Services\PusatAkun::cocokSandiPusat($kredensial['email'], $kredensial['password']);
+            if (! $u) {
+                return back()->withErrors(['email' => 'Email atau password salah.'])->onlyInput('email');
+            }
+            Auth::login($u, $request->boolean('ingat'));
         }
 
         $request->session()->regenerate();

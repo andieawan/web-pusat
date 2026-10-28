@@ -18,6 +18,9 @@ class PusatController extends Controller
         if (! PusatKlien::aktif() || ! PusatKlien::siap()) {
             return redirect()->route('login')->withErrors(['email' => 'Login lewat Pusat belum diaktifkan.']);
         }
+        if (! PusatKlien::hidup()) {
+            return redirect()->route('login')->withErrors(['email' => 'Pusat Sekolah sedang tidak bisa dihubungi. Masuk dengan email & password di atas (akun Pusat memakai password Pusat).']);
+        }
         $state = Str::random(40);
         $verifier = Str::random(64);
         $request->session()->put('pusat_sso', ['state' => $state, 'verifier' => $verifier, 'waktu' => time()]);
@@ -90,6 +93,7 @@ class PusatController extends Controller
         $data = (array) $request->json('data', []);
         if (in_array($event, ['akun.diperbarui', 'akses.diperbarui'], true)) {
             PusatAkun::cabutBilaPerlu($data);
+            PusatAkun::terapkanDariPusat($data); // login cadangan
         } elseif (str_starts_with($event, 'jurusan.')) {
             \App\Services\JurusanSync::satu($data);
             \Illuminate\Support\Facades\Cache::forget('pusat.jurusan');

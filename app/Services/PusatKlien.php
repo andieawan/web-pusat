@@ -21,6 +21,31 @@ class PusatKlien
         return Schema::hasColumn('users', 'pusat_uuid');
     }
 
+    /** Cek cepat Pusat hidup (dipakai sebelum mengarahkan ke login Pusat). */
+    public static function hidup(): bool
+    {
+        try {
+            return self::http()->timeout(4)->connectTimeout(3)->get('/api/v1/ping')->successful();
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
+    /** Akun admin website dari Pusat (izin "akun") + salinan hash untuk login cadangan (izin "akun_sandi"). */
+    public static function sinkronAkun(): void
+    {
+        try {
+            $res = self::http()->get('/api/v1/akun', ['per_page' => 500]);
+            if ($res->successful()) {
+                foreach ((array) $res->json('data', []) as $a) {
+                    PusatAkun::terapkanDariPusat((array) $a);
+                }
+            }
+        } catch (\Throwable $e) {
+            report($e);
+        }
+    }
+
     public static function http(): PendingRequest
     {
         return Http::baseUrl(config('pusat.url'))
@@ -105,6 +130,7 @@ class PusatKlien
         }
         $ok = self::ringkasan() !== null && self::jurusan() !== null;
         self::pegawai(); // opsional: butuh izin pegawai_dasar di Pusat
+        self::sinkronAkun(); // akun admin & login cadangan
 
         return $ok && Cache::get('pusat.sinkron_terakhir') !== null;
     }

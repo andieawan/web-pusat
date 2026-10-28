@@ -36,7 +36,7 @@ class PusatTest extends TestCase
     private function loginViaPusat(array $info)
     {
         Http::swap(new \Illuminate\Http\Client\Factory);
-        Http::fake(['pusat.test/api/sso/token' => Http::response(['access_token' => 't', 'user' => $info])]);
+        Http::fake(['pusat.test/api/sso/token' => Http::response(['access_token' => 't', 'user' => $info]), 'pusat.test/api/v1/ping' => Http::response(['ok' => true])]);
         $this->get('/pusat/masuk');
 
         return $this->get('/pusat/callback?code=abc&state='.session('pusat_sso.state'));
@@ -54,6 +54,7 @@ class PusatTest extends TestCase
 
     public function test_mulai_mengarah_ke_pusat_dengan_pkce_dan_redirect_uri(): void
     {
+        Http::fake(['pusat.test/api/v1/ping' => Http::response(['ok' => true])]);
         $loc = $this->get('/pusat/masuk')->headers->get('Location');
         $this->assertStringStartsWith('https://pusat.test/sso/authorize?', $loc);
         parse_str(parse_url($loc, PHP_URL_QUERY), $q);
@@ -261,5 +262,24 @@ class PusatTest extends TestCase
             ->assertSee('Redirect URI')->assertSee('URL webhook')->assertSee('2026/2027')->assertSee('72 siswa aktif')->assertSee('Sinkron sekarang');
         $this->post('/admin/integrasi/uji-pusat')->assertSessionHas('ok');
         $this->post('/admin/integrasi/sinkron')->assertSessionHas('ok');
+    }
+
+    public function test_login_cadangan_admin_dari_pusat_saat_pusat_mati(): void
+    {
+        $this->webhook('akses.diperbarui', ['uuid' => 'u-9', 'email' => 'Kepala@Sekolah.Test', 'nama' => 'Kepala', 'aktif' => true, 'peran' => ['admin'],
+            'password_hash' => password_hash('SandiPusat123', PASSWORD_BCRYPT)])->assertOk();
+        $u = \App\Models\User::where('pusat_uuid', 'u-9')->firstOrFail();
+        $this->assertTrue((bool) $u->is_admin);
+
+        Http::fake(fn () => throw new \Illuminate\Http\Client\ConnectionException('mati'));
+        $this->get('/pusat/masuk')->assertRedirect('/login')->assertSessionHasErrors('email');
+        $this->post('/login', ['email' => 'kepala@sekolah.test', 'password' => 'salah'])->assertSessionHasErrors('email');
+        $this->post('/login', ['email' => 'kepala@sekolah.test', 'password' => 'SandiPusat123'])->assertRedirect(route('admin.dashboard'));
+        $this->assertAuthenticatedAs($u);
+
+        // akses admin dicabut di Pusat → login cadangan ikut tertutup
+        $this->post('/logout');
+        $this->webhook('akses.diperbarui', ['uuid' => 'u-9', 'aktif' => true, 'peran' => []])->assertOk();
+        $this->post('/login', ['email' => 'kepala@sekolah.test', 'password' => 'SandiPusat123'])->assertSessionHasErrors('email');
     }
 }

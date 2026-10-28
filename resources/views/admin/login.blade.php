@@ -34,6 +34,9 @@
     @if (\App\Services\PusatKlien::aktif())
         <a href="{{ route('pusat.masuk') }}" class="tombol tombol--garis" style="display:block;text-align:center;margin-top:10px">Masuk lewat Pusat</a>
     @endif
+    @if (\App\Services\PusatKlien::aktif())
+        <p class="petunjuk-login">Akun admin dari Pusat bisa memakai email &amp; password Pusat di form ini bila Pusat sedang tidak bisa dihubungi.</p>
+    @endif
     <a href="{{ route('beranda') }}" class="kembali">← Kembali ke website</a>
 </form>
 </body>
