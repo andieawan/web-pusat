@@ -14,19 +14,19 @@ git pull --ff-only
 
 # Pengerasan & kompresi Nginx (idempotent; aman dijalankan berulang).
 if [ -d /etc/nginx/conf.d ]; then
+    # Tiap baris ditulis hanya bila belum aktif di nginx.conf: Ubuntu sudah menyalakan "gzip on;",
+    # dan direktif ganda membuat nginx -t gagal.
+    ada() { grep -Eqs "^\s*$1\s" /etc/nginx/nginx.conf; }
     {
         echo "# Dikelola oleh deploy/update.sh"
-        echo "server_tokens off;"
-        # Ubuntu mengaktifkan gzip tetapi hanya untuk HTML; tambahkan CSS/JS/SVG bila belum diatur.
-        if ! grep -Eqs '^\s*gzip_types' /etc/nginx/nginx.conf; then
-            echo "gzip on;"
-            echo "gzip_comp_level 5;"
-            echo "gzip_min_length 512;"
-            echo "gzip_vary on;"
-            echo "gzip_types text/css application/javascript text/javascript application/json image/svg+xml;"
-        fi
+        ada server_tokens || echo "server_tokens off;"
+        ada gzip || echo "gzip on;"
+        ada gzip_comp_level || echo "gzip_comp_level 5;"
+        ada gzip_min_length || echo "gzip_min_length 512;"
+        ada gzip_vary || echo "gzip_vary on;"
+        ada gzip_types || echo "gzip_types text/css application/javascript text/javascript application/json image/svg+xml;"
     } > /etc/nginx/conf.d/smkibu-hardening.conf
-    if nginx -t 2>/dev/null; then systemctl reload nginx; else rm -f /etc/nginx/conf.d/smkibu-hardening.conf; echo "PERINGATAN: konfigurasi hardening Nginx dilewati (nginx -t gagal)."; fi
+    if galat=$(nginx -t 2>&1); then systemctl reload nginx; else rm -f /etc/nginx/conf.d/smkibu-hardening.conf; echo "PERINGATAN: konfigurasi hardening Nginx dilewati (nginx -t gagal):"; echo "$galat" | grep -E "emerg|error" | head -3 || true; fi
 fi
 # Jadwal backup harian 01:30 (dipasang sekali; tidak menimpa jadwal yang sudah diatur)
 if [ ! -f /etc/cron.d/smkibu-backup ]; then
