@@ -53,7 +53,7 @@ img{max-width:100%}
 .hero__nav--kiri{left:14px}.hero__nav--kanan{right:14px}
 
 /* Statistik */
-.statistik{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:14px}
+.statistik{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:14px}
 .stat{display:flex;gap:14px;align-items:center;padding:16px;border:1px solid var(--garis);border-radius:12px;background:#f7faff}
 .stat__ikon{width:56px;height:56px;flex:none;border-radius:50%;background:#dfeafb;display:grid;place-items:center;font-size:26px;color:var(--biru-tua)}
 .stat small{display:block;font-size:12px;font-weight:600}
@@ -139,7 +139,7 @@ img{max-width:100%}
 
 /* Responsif */
 @media(max-width:1000px){
-  .statistik{grid-template-columns:repeat(2,1fr)}
+  .statistik{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dua-kolom,.dua-kolom--tentang,.dua-kolom--galeri{grid-template-columns:1fr}
   .berita{grid-template-columns:1fr}
   .footer__grid{grid-template-columns:1fr 1fr}
@@ -310,3 +310,4 @@ a.pager__item:hover{background:#eef4fd}
 /* Foto kepala sekolah */
 .sambutan__avatar{background-size:cover;background-position:center top}
 @media(min-width:801px){.sambutan__avatar{width:160px;height:160px;border:4px solid #fff}.sambutan{grid-template-columns:220px 1fr}}
+@media(max-width:420px){.stat{flex-direction:column;align-items:flex-start;gap:8px;padding:14px}.stat__ikon{width:44px;height:44px;font-size:20px}}
