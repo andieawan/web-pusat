@@ -53,7 +53,7 @@ DOMAIN=smkibupakusari.sch.id APP_URL=https://smkibupakusari.sch.id PROXY_IP=192.
 > Skrip mengunduh lewat `curl`/`git` dan akan gagal untuk repo privat. Clone dulu manual: `git clone https://github.com/andieawan/web-pusat.git /var/www/web-pusat` (lalu jalankan `sudo bash /var/www/web-pusat/deploy/install.sh`, skrip mengenali folder yang sudah ada). Saat `git clone` diminta *Username* isi nama akun GitHub, *Password* isi **token** (bukan password akun). Agar `git pull` untuk pembaruan tidak meminta lagi:
 > `git config --global credential.helper store` (jalankan sebelum clone; token tersimpan di `~/.git-credentials` milik user ini). Jangan tempel token ke chat/dokumen. Alternatif: jadikan repo *Public*, atau pakai *Deploy key* (SSH).
 
-- **Catat email dan password admin** yang dicetak di akhir (hanya tampil sekali).
+- Tidak ada admin lokal: admin website dibuat di **Pusat** (beri peran admin Website), lalu masuk lewat Pusat. Saat Pusat mati, admin tetap bisa masuk dengan email & password Pusat.
   Skrip aman dijalankan ulang: database dan `.env` yang sudah ada tidak ditimpa.
 
 ## 3. Unggah gambar tetap

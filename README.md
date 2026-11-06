@@ -91,7 +91,9 @@ post_max_size = 12M
 ## Admin
 
 - Login: `/login`
-- Akun awal: email dari `ADMIN_EMAIL`, password dari `ADMIN_PASSWORD` atau yang ditampilkan saat seeding.
+- Server sekolah (`deploy/install.sh`, `ADMIN_LOKAL=false`): **tidak ada admin lokal**. Admin dibuat di Pusat (peran admin
+  Website); akunnya tersalin lewat webhook & tiap jam, dan saat Pusat mati admin masuk dengan email & password Pusat.
+- Tanpa Pusat (`ADMIN_LOKAL=true`, mis. coba di komputer sendiri): email dari `ADMIN_EMAIL`, password dari `ADMIN_PASSWORD` atau yang ditampilkan saat seeding.
 - Hanya akun dengan `is_admin = true` yang bisa login dan membuka `/admin`.
 - Ganti password kapan saja:
   ```bash

@@ -24,6 +24,9 @@ class DatabaseSeeder extends Seeder
 
     private function buatAdmin(): void
     {
+        if (! config('smk.admin_lokal')) {
+            return; // admin website = akun Pusat berperan admin (dibuat saat sinkron / login lewat Pusat)
+        }
         $email = config('smk.admin_email');
         $admin = User::firstOrNew(['email' => $email]);
 

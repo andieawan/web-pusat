@@ -107,6 +107,7 @@ SQL
         -e "s|^DB_USERNAME=.*|DB_USERNAME=${DB_USER}|" \
         -e "s|^DB_PASSWORD=.*|DB_PASSWORD=${DB_PASS}|" \
         -e "s|^ADMIN_PASSWORD=.*|ADMIN_PASSWORD=|" \
+        -e "s|^ADMIN_LOKAL=.*|ADMIN_LOKAL=false|" \
         -e "s|^TRUSTED_PROXIES=.*|TRUSTED_PROXIES=${PROXY_IP}|" .env
     case "$APP_URL" in https://*) sed -i 's|^SESSION_SECURE_COOKIE=.*|SESSION_SECURE_COOKIE=true|' .env ;; esac
     php artisan key:generate --force
@@ -118,7 +119,7 @@ artisan() { runuser -u www-data -- php "$APP_DIR/artisan" "$@"; }
 
 if [ "$NEW_INSTALL" = "1" ]; then
     info "Migrasi database + data awal"
-    # Password admin acak akan dicetak sekali oleh seeder (ADMIN_PASSWORD di .env sengaja kosong).
+    # Tanpa admin lokal (ADMIN_LOKAL=false): admin website dibuat di Pusat.
     SEED_LOG="$(mktemp)"
     artisan migrate --seed --force 2>&1 | tee "$SEED_LOG"
 else
@@ -182,6 +183,10 @@ nginx -t
 systemctl enable --now nginx
 systemctl reload nginx
 
+# Penjadwal Laravel: salin akun admin & password cadangan dari Pusat tiap jam
+echo "* * * * * www-data cd $APP_DIR && php artisan schedule:run >> /dev/null 2>&1" > /etc/cron.d/smkibu-jadwal
+chmod 644 /etc/cron.d/smkibu-jadwal
+
 # Backup harian 01:30 (database + foto), simpan 14 hari di /var/backups/smkibu
 if [ ! -f /etc/cron.d/smkibu-backup ]; then
     echo "30 1 * * * root APP_DIR=$APP_DIR bash $APP_DIR/deploy/backup.sh >> /var/log/smkibu-backup.log 2>&1" > /etc/cron.d/smkibu-backup
@@ -202,8 +207,6 @@ cat <<RINGKAS
 RINGKAS
 if [ "${NEW_INSTALL}" = "1" ]; then
     printf '  Database : %s / user %s (password ada di %s/.env)\n' "$DB_NAME" "$DB_USER" "$APP_DIR"
-    printf '\n  Kredensial admin (dicetak seeder di atas; CATAT SEKARANG, tidak tampil lagi):\n'
-    grep -E 'Email:|Password:' "$SEED_LOG" | sed 's/^/    /' || true
     rm -f "$SEED_LOG"
 fi
 cat <<LANJUT
@@ -211,5 +214,7 @@ cat <<LANJUT
   Berikutnya:
    1. Unggah logo.png, gedung.jpg, hero.jpg ke ${APP_DIR}/public/images/
    2. Atur reverse proxy (NPMplus) + DNS Cloudflare  -> lihat deploy/PANDUAN-VM.md
-   3. Login admin, lalu isi Pengaturan Situs & Banner Hero
+   3. Sambungkan ke Pusat (.env PUSAT_*), beri akun Anda peran admin Website di Pusat,
+      lalu login lewat Pusat dan isi Pengaturan Situs & Banner Hero
+      (tanpa admin lokal; saat Pusat mati, admin masuk dengan email & password Pusat)
 LANJUT

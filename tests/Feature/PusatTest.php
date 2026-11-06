@@ -282,4 +282,16 @@ class PusatTest extends TestCase
         $this->webhook('akses.diperbarui', ['uuid' => 'u-9', 'aktif' => true, 'peran' => []])->assertOk();
         $this->post('/login', ['email' => 'kepala@sekolah.test', 'password' => 'SandiPusat123'])->assertSessionHasErrors('email');
     }
+
+    public function test_tanpa_admin_lokal_admin_dibuat_dari_pusat(): void
+    {
+        config(['smk.admin_lokal' => false]);
+        $this->seed(\Database\Seeders\DatabaseSeeder::class);
+        $this->assertSame(0, \App\Models\User::count());
+        \App\Services\PusatAkun::terapkanDariPusat(['uuid' => 'u-9', 'email' => 'kepala.web@smkibu.sch.id', 'nama' => 'Admin Web', 'aktif' => true,
+            'peran' => ['admin'], 'password_hash' => password_hash('SandiPusat123', PASSWORD_BCRYPT)]);
+        $u = \App\Models\User::where('pusat_uuid', 'u-9')->firstOrFail();
+        $this->assertTrue((bool) $u->is_admin);
+        $this->assertSame($u->id, \App\Services\PusatAkun::cocokSandiPusat('kepala.web@smkibu.sch.id', 'SandiPusat123')?->id);
+    }
 }
