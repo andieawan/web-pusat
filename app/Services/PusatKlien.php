@@ -123,7 +123,7 @@ class PusatKlien
     }
 
     /** Buang salinan sementara lalu ambil ulang ringkasan & jurusan dari Pusat (tombol "Sinkron sekarang"). */
-    public static function segarkan(): bool
+    public static function segarkan(?string $pemicu = null): bool
     {
         foreach (['ringkasan', 'jurusan', 'pegawai'] as $n) {
             Cache::forget("pusat.$n");
@@ -132,6 +132,26 @@ class PusatKlien
         self::pegawai(); // opsional: butuh izin pegawai_dasar di Pusat
         self::sinkronAkun(); // akun admin & login cadangan
 
-        return $ok && Cache::get('pusat.sinkron_terakhir') !== null;
+        $ok = $ok && Cache::get('pusat.sinkron_terakhir') !== null;
+        self::lapor($ok, [], $ok ? '' : 'Ringkasan/jurusan dari Pusat tidak bisa diambil.', $pemicu);
+
+        return $ok;
+    }
+
+    /**
+     * Lapor hasil sinkron ke Pusat (kolom "Sinkron terakhir" di menu Aplikasi Pusat + notifikasi admin).
+     * Tidak pernah menggagalkan sinkron; Pusat versi lama yang belum punya jalurnya cukup membalas 404.
+     */
+    public static function lapor(bool $ok, array $hasil = [], string $galat = '', ?string $pemicu = null): void
+    {
+        try {
+            self::http()->timeout(5)->post('/api/v1/sinkron/laporan', [
+                'ok' => $ok,
+                'pemicu' => $pemicu ?? (app()->runningInConsole() ? 'otomatis' : 'manual'),
+                'hasil' => $hasil,
+                'galat' => mb_substr($galat, 0, 1000),
+            ]);
+        } catch (\Throwable) {
+        }
     }
 }

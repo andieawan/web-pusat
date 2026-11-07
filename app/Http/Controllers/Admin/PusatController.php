@@ -101,7 +101,7 @@ class PusatController extends Controller
             \App\Services\StafSync::satu($data);
             \Illuminate\Support\Facades\Cache::forget('pusat.pegawai');
         } elseif ($event === 'sinkron.diminta') {
-            app()->terminating(fn () => \App\Services\PusatKlien::segarkan()); // tarik ulang setelah jawaban terkirim ke Pusat
+            app()->terminating(fn () => \App\Services\PusatKlien::segarkan('otomatis')); // tarik ulang setelah jawaban terkirim ke Pusat
         } elseif ($event === 'profil.diperbarui') {
             \App\Services\ProfilPusat::tarik();
         } elseif ($event === 'sambungan.diperbarui') {
