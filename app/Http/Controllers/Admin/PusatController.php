@@ -83,7 +83,7 @@ class PusatController extends Controller
     public function webhook(Request $request)
     {
         if (! PusatKlien::aktif() || ! PusatKlien::siap() || config('pusat.webhook_secret') === '') {
-            return response()->json(['ok' => false], 404);
+            return response()->json(['ok' => false, 'error' => 'integrasi_belum_aktif'], 404); // PUSAT_* di .env belum lengkap
         }
         $waktu = (int) $request->header('X-Pusat-Timestamp');
         if (! PusatTanda::verifikasi((string) config('pusat.webhook_secret'), $waktu, $request->getContent(), (string) $request->header('X-Pusat-Signature'))) {
