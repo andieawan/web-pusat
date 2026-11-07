@@ -44,7 +44,11 @@ body.admin{display:flex;min-height:100vh}
 .side__user b{display:block;color:#fff;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .side__user small{font-size:11.5px;color:#b9d3c3;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .side__bawah form{flex:none}
-.side__bawah button{background:none;border:0;color:#d6e6dc;width:38px;height:38px;cursor:pointer;border-radius:9px;display:grid;place-items:center;font-size:18px}
+.side__bawah button{background:none;border:1px solid #ffffff33;color:#d6e6dc;height:38px;padding:0 10px;cursor:pointer;border-radius:9px;display:flex;gap:6px;align-items:center;font-size:13px;font-family:inherit}
+.side__bawah button i{font-size:17px}
+.atas__keluar{margin:0;flex:none}
+.atas__keluar button{background:none;border:1px solid var(--garis);border-radius:9px;height:36px;padding:0 12px;display:flex;gap:6px;align-items:center;font:inherit;font-size:13px;font-weight:500;color:#b3261e;cursor:pointer}
+.atas__keluar button:hover{background:#fbebeb;border-color:#e8b4b0}
 .side__bawah button:hover{background:#ffffff14;color:#fff}
 .side-lapis{display:none}
 
@@ -206,6 +210,7 @@ a.pager__item:hover{background:#eef3ee}
   .atas{padding:10px 16px}
   .atas__menu{display:block}
   .atas__tautan span{display:none}
+  .atas__keluar button{padding:0 10px}
   .isi{padding:20px 16px 40px}
   .form__badan{padding:18px}
   .form__aksi{padding:14px 18px}

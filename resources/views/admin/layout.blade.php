@@ -67,7 +67,7 @@
             <div><b>{{ $user->name }}</b><small>{{ $user->email }}</small></div>
         </div>
         <form method="POST" action="{{ route('logout') }}">@csrf
-            <button type="submit" title="Keluar" aria-label="Keluar"><i class="bi bi-box-arrow-left"></i></button>
+            <button type="submit" class="side__keluar" title="Keluar dari panel admin"><i class="bi bi-box-arrow-left"></i><span>Keluar</span></button>
         </form>
     </div>
 </aside>
@@ -77,6 +77,9 @@
         <button type="button" class="atas__menu" data-menu="buka" aria-label="Buka menu" aria-controls="menu-samping"><i class="bi bi-list"></i></button>
         <div class="atas__judul">@yield('title', 'Admin')</div>
         <a href="{{ route('beranda') }}" target="_blank" rel="noopener" class="atas__tautan"><i class="bi bi-box-arrow-up-right"></i><span>Lihat website</span></a>
+        <form method="POST" action="{{ route('logout') }}" class="atas__keluar">@csrf
+            <button type="submit" title="Keluar dari panel admin"><i class="bi bi-box-arrow-right"></i><span>Keluar</span></button>
+        </form>
     </header>
     <main class="isi">
         @if (session('err'))<div class="notif notif--err" role="alert"><i class="bi bi-exclamation-triangle-fill"></i><div>{{ session('err') }}</div><button type="button" class="notif__tutup" data-tutup aria-label="Tutup">&times;</button></div>@endif
