@@ -43,13 +43,13 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         if ($viaPusat && \App\Services\PusatKlien::aktif()) {
-            // Keluar juga dari Pusat (mencabut token), lalu kembali ke beranda website.
+            // Keluar juga dari Pusat (mencabut token), lalu kembali ke form login panel admin.
             return redirect()->away(config('pusat.url').'/sso/logout?'.http_build_query([
                 'client_id' => config('pusat.client_id'),
-                'post_logout_redirect_uri' => route('beranda'),
+                'post_logout_redirect_uri' => route('login'),
             ]));
         }
 
-        return redirect()->route('beranda');
+        return redirect()->route('login')->with('ok', 'Anda sudah keluar.');
     }
 }

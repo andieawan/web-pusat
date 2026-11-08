@@ -19,6 +19,8 @@
     <p>SMKS Islam Bustanul Ulum Pakusari</p>
     @if ($errors->any())
         <div class="galat" role="alert">{{ $errors->first() }}</div>
+    @elseif (session('ok'))
+        <div class="info" role="status">{{ session('ok') }}</div>
     @endif
     <label>Email
         <input type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username">

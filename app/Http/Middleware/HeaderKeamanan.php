@@ -25,9 +25,13 @@ class HeaderKeamanan
         }
 
         if ($request->is('admin', 'admin/*', 'login')) {
+            // form-action wajib menyertakan Pusat: Chrome ikut memeriksa redirect setelah submit form, jadi tombol
+            // Keluar (POST /logout → Pusat /sso/logout) diam saja bila Pusat tidak diizinkan di sini.
+            $pusat = parse_url((string) config('pusat.url'));
+            $asalPusat = isset($pusat['scheme'], $pusat['host']) ? ' '.$pusat['scheme'].'://'.$pusat['host'].(isset($pusat['port']) ? ':'.$pusat['port'] : '') : '';
             $respons->headers->set('Content-Security-Policy',
                 "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; "
-                . "font-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'");
+                . "font-src 'self'; form-action 'self'{$asalPusat}; frame-ancestors 'self'; base-uri 'self'; object-src 'none'");
             $respons->headers->set('Cache-Control', 'no-store, private');
         }
 

@@ -108,8 +108,20 @@ class PusatTest extends TestCase
     public function test_keluar_dari_sesi_pusat_juga_keluar_dari_pusat(): void
     {
         $this->loginViaPusat($this->info());
-        $loc = $this->post('/logout')->headers->get('Location');
+        $res = $this->post('/logout');
+        $loc = $res->headers->get('Location');
         $this->assertStringStartsWith('https://pusat.test/sso/logout?', $loc);
+        $this->assertStringContainsString('post_logout_redirect_uri='.urlencode(route('login')), $loc);
+        // Chrome memeriksa form-action juga pada redirect setelah submit: Pusat harus diizinkan, kalau tidak tombol Keluar diam saja.
+        $this->assertStringContainsString("form-action 'self' https://pusat.test;", $this->get('/login')->headers->get('Content-Security-Policy'));
+    }
+
+    public function test_keluar_akun_lokal_kembali_ke_form_login(): void
+    {
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        $this->post('/logout')->assertRedirect(route('login'));
+        $this->assertGuest();
+        $this->get(route('login'))->assertSee('Anda sudah keluar.');
     }
 
     // ---- Statistik ----
